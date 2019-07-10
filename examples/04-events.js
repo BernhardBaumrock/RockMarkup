@@ -1,0 +1,1 @@
+// RockSandbox.js takes care of logging all events to the console!

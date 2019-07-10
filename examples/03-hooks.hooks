@@ -1,0 +1,12 @@
+<?php namespace ProcessWire;
+/** @var WireFileTools $this */
+$this->addHookBefore("InputfieldForm(name=renderExample)::render", function(HookEvent $event) {
+  $form = $event->object; /** @var InputfieldForm $form */
+  $name = $this->input->get('name', 'text');
+  if($name != '03-hooks') return;
+
+  $f = $this->modules->get('InputfieldMarkup');
+  $f->label = "Hooks Example";
+  $f->value = "This field was added via hook in 03-hooks.hooks";
+  $form->insertBefore($f, $form->getChildByName('03-hooks'));
+});
