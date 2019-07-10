@@ -8,10 +8,25 @@
 class ProcessRockMarkup extends Process {
 
   /**
+   * Reference to RockMarkup module
+   * 
+   * @var RockMarkup
+   */
+  private $rm;
+
+  /**
    * Init. Optional.
    */
   public function init() {
     parent::init(); // always remember to call the parent init
+
+    // set reference to RockMarkup module
+    $rm = $this->modules->get('RockMarkup');
+    $this->rm = $rm;
+    
+    // add sandbox js and css
+    $this->config->scripts->add($rm->toUrl(__DIR__ . '/RockSandbox.js'));
+    $this->config->styles->add($rm->toUrl(__DIR__ . '/RockSandbox.css'));
   }
 
   /**
@@ -24,16 +39,15 @@ class ProcessRockMarkup extends Process {
 
     // single example view
     if($name) {
-      return $this->files->render(__DIR__ . '/views/renderExample', [
-        'sandbox' => $this->modules->get($this->className),
+      return $this->files->render(__DIR__ . '/views/example', [
+        'rm' => $this->rm,
         'name' => $name,
       ]);
     }
     
     // list overview
     return $this->files->render(__DIR__ . '/views/execute', [
-      'path' => __DIR__."/examples",
-      'sandbox' => $this->modules->get($this->className),
+      'rm' => $this->rm,
     ]);
   }
 }

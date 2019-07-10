@@ -1,7 +1,7 @@
 <?php namespace ProcessWire;
 /** @var WireFileTools $this */
 $this->addHookBefore(
-  "InputfieldForm(name=renderExample)::render",
+  "InputfieldForm(name=example)::render",
   function(HookEvent $event) {
     $form = $event->object; /** @var InputfieldForm $form */
     $name = $this->input->get('name', 'text');

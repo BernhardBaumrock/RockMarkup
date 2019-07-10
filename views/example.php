@@ -1,27 +1,19 @@
 <?php namespace ProcessWire;
 /** @var InputfieldForm $form */
-/** @var RockMarkupSandbox $sandbox */
+/** @var RockMarkup $rm */
 $form = $this->modules->get('InputfieldForm');
-$form->name = 'renderExample';
+$form->name = 'example';
 $form->method = 'GET';
 
-// get path from url parameter
-$dir = $this->input->get('dir', 'int');
-$path = $sandbox->getExampleDirs($dir);
-$info = (object)pathinfo($name);
+// get file
+$file = $rm->getFile($name);
+if(!$file) return;
 
 // add hidden name field
 $form->add([
   'type' => 'hidden',
   'name' => 'name',
-  'value' => $info->filename,
-]);
-
-// add hidden dir field
-$form->add([
-  'type' => 'hidden',
-  'name' => 'dir',
-  'value' => $dir,
+  'value' => $name,
 ]);
 
 // ajax checkbox
@@ -48,9 +40,8 @@ $form->add($f);
 
 // add rendered grid
 $form->add([
-  'type' => str_replace('Sandbox', '', $sandbox->className),
-  'name' => $info->filename,
-  'path' => $path,
+  'type' => 'RockMarkup', // todo: str_replace('Process', '', $sandbox->className),
+  'name' => $name,
   'label' => 'Result',
   'collapsed' => $isAjax ? Inputfield::collapsedYesAjax : Inputfield::collapsedNo,
 ]);
@@ -58,10 +49,12 @@ $form->add([
 // add code
 $form->add([
   'type' => 'markup',
-  'name' => 'code_'.$info->filename,
+  'name' => "code_$name",
   'label' => '',
   'icon' => 'code',
-  'value' => $sandbox->renderCode($info->filename),
+  'value' => $this->files->render(__DIR__ . '/code', [
+    'file' => $file,
+  ]),
 ]);
 ?>
 
