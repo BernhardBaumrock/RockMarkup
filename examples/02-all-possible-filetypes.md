@@ -6,6 +6,8 @@ You can use these files:
 to show descriptions (markdown)
 * **PHP**
 for the content of the field (regular php code)
+* **ready**
+for PHP code that is loaded on the Inputfield's renderReady event
 * **CSS**
 for loading additional style rules
 * **JS**
