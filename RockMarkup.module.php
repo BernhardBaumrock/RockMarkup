@@ -18,7 +18,7 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
    * Possible extensions for RockMarkupFiles
    * @var array
    */
-  public $extensions = ['md', 'php', 'css', 'js', 'hooks', 'ready'];
+  public $extensions = ['md', 'php', 'ready', 'css', 'js', 'hooks'];
 
   /**
    * Array of all RockMarkupFiles

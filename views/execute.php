@@ -6,7 +6,7 @@ $url = "{$this->config->urls->admin}module/edit?name={$rm->className}";
 
 <p>
   List of all RockMarkup files. Add directories in the 
-  <a href="<?= $url ?>">module's config</a>.
+  <a href="<?= $url ?>">module's config</a> or via RockMarkup::getDirs hook.
 </p>
 
 <ul uk-accordion>

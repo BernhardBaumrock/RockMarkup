@@ -9,6 +9,8 @@
  * hook would never get executed because the code is loaded via AJAX when the
  * page was already rendered.
  */
+if($this->page->name != 'rockmarkup') return;
+
 $name = $this->input->get('name', 'string');
 if($name != '02-all-possible-filetypes') return;
 
