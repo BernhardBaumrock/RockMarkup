@@ -40,8 +40,8 @@ class FieldtypeRockMarkup extends Fieldtype {
       'name' => 'path',
       'label' => $this->_('Custom File Path'),
       'value' => $field->path,
-      'description' => $this->_('Relative to root folder, default is') . " " . $f->toUrl($f->defaultPath),
-      'notes' => $this->_('Current path') . ": " . $f->getFilePath(),
+      'description' => $this->_('Relative to root folder, default is') . " xxx",
+      'notes' => $this->_('Current path') . ": xxx",
     ]);
 
     return $inputfields; 
