@@ -7,7 +7,9 @@ class RockMarkupFile extends WireData {
   public function __construct($file) {
     if(!is_file($file)) throw new WireException("File $file not found!");
     $info = pathinfo($file);
+
     $rm = $this->modules->get('RockMarkup');
+    $this->rm = $rm;
     
     $name = $info['filename'];
     $f = $rm->getFile($name);
@@ -68,35 +70,43 @@ class RockMarkupFile extends WireData {
     if($tracy AND $tracy->editor) $link = $tracy->editor;
     
     $out = '';
-    foreach($this->files as $file) {
-      $info = (object)pathinfo($file);
+    foreach($this->rm->extensions as $ext) {
 
-      $lang = $info->extension;
-      if($lang == 'hooks') $lang = 'php';
-      if($lang == 'md') $lang = '';
+      $file = $this->getAsset($ext);
+      $code = "<a href='./?name={$this->name}&create=$ext'><i class='fa fa-plus'></i> Create file</a>";
+      $label = "{$this->name}.$ext";
 
-      $dir = $info->dirname;
-      $base = $info->basename;
-      $ext = $info->extension;
+      if($file) {
+        $info = (object)pathinfo($file->file);
 
-      // setup editor link
-      $url = str_replace("%file", "$dir/$base", $link);
-      $url = str_replace("%line", "1", $url);
-      $code = $this->sanitizer->entities(file_get_contents("$dir/$base"));
-      $code = "<pre class='uk-margin-small'><code class='$lang'>$code</code></pre>";
+        $lang = $info->extension;
+        if($lang == 'hooks') $lang = 'php';
+        if($lang == 'md') $lang = '';
 
-      // markdown?
-      if($ext == 'md') {
-        require_once(__DIR__.'/lib/Parsedown.php');
-        $Parsedown = new \Parsedown();
-        $code = $Parsedown->text($this->wire->files->render("$dir/$base"));
+        $dir = $info->dirname;
+        $base = $info->basename;
+
+        // setup editor link
+        $url = str_replace("%file", "$dir/$base", $link);
+        $url = str_replace("%line", "1", $url);
+        $code = $this->sanitizer->entities(file_get_contents("$dir/$base"));
+        $code = "<pre class='uk-margin-small'><code class='$lang'>$code</code></pre>";
+
+        // markdown?
+        if($ext == 'md') {
+          require_once(__DIR__.'/lib/Parsedown.php');
+          $Parsedown = new \Parsedown();
+          $code = $Parsedown->text($this->wire->files->render("$dir/$base"));
+        }
+
+        $label = "<a href='$url'>$base</a>";
       }
       
       // add line to table
       $out .= "<tr>"
         ."<td class='uk-text-nowrap'>"
           .'<i class="fa fa-file-code-o uk-margin-small-right" aria-hidden="true"></i>'
-          ."<a href='$url'>$base</a>"
+          .$label
         ."</td>"
         ."<td>$code</td>"
         ."</tr>";

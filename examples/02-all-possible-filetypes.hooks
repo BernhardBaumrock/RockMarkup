@@ -1,0 +1,23 @@
+<?php
+/**
+ * .hooks files are regular PHP files that are loaded on initialization of the
+ * RockMarkup module. As the RockMarkup module is an autoload module that loads
+ * automatically for all pages in the admin (template=admin) you can place custom
+ * hooks in this file.
+ * The reason for this file is that if you had an AJAX collapsed Inputfield and
+ * used the regular PHP file to attach your hook it would not work because the
+ * hook would never get executed because the code is loaded via AJAX when the
+ * page was already rendered.
+ */
+$name = $this->input->get('name', 'string');
+if($name != '02-all-possible-filetypes') return;
+
+$tracy = $this->modules->get('TracyDebugger');
+if($tracy) {
+  // see the tracy debug bar!
+  bd('tracy is great!');
+}
+else {
+  // set the noTracy config variable in JavaScript to TRUE
+  $this->config->js('noTracy', true);
+}

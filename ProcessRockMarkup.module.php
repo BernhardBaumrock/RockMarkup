@@ -39,6 +39,10 @@ class ProcessRockMarkup extends Process {
 
     // single example view
     if($name) {
+      // create file?
+      $this->createFile();
+
+      // render example
       return $this->files->render(__DIR__ . '/views/example', [
         'rm' => $this->rm,
         'name' => $name,
@@ -49,6 +53,28 @@ class ProcessRockMarkup extends Process {
     return $this->files->render(__DIR__ . '/views/execute', [
       'rm' => $this->rm,
     ]);
+  }
+
+  /**
+   * Create file?
+   */
+  public function createFile() {
+    $name = $this->input->get('name', 'string');
+    if(!$name) return;
+
+    $ext = $this->input->get('create', 'string');
+    if(!$ext) return;
+
+    $file = $this->rm->getFile($name);
+    if(!$file) return;
+
+    $asset = $file->getAsset($ext);
+    if($asset) throw new WireException("File $ext already exists!");
+    
+    // create file and redirect
+    $new = "{$file->dir}$name.$ext"; 
+    file_put_contents($new, "");
+    $this->session->redirect("./?name=$name");
   }
 }
 

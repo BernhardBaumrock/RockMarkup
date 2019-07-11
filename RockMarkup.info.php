@@ -10,7 +10,7 @@ $info = array(
   'version' => '0.0.1',
   'summary' => 'RockMarkup Main Module',
   'singular' => true,
-  'autoload' => true,
+  'autoload' => 'template=admin',
   'icon' => 'bolt',
   'installs' => [
     'FieldtypeRockMarkup',

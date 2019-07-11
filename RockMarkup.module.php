@@ -18,7 +18,7 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
    * Possible extensions for RockMarkupFiles
    * @var array
    */
-  public $extensions = ['md', 'php', 'hooks', 'js', 'css'];
+  public $extensions = ['md', 'php', 'css', 'js', 'hooks'];
 
   /**
    * Array of all RockMarkupFiles
@@ -53,11 +53,12 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
    * 
    * This method can be hooked so that other modules can use RockMarkup as well.
    * 
+   * @param bool $addExampleDir
    * @return array
    */
-  public function ___getDirs() {
+  public function ___getDirs($addExampleDir = false) {
     $dirs = explode("\n", $this->dirs);
-    $dirs[] = $this->exampleDir;
+    if($addExampleDir) $dirs[] = $this->exampleDir;
     return $dirs;
   }
 
@@ -70,7 +71,7 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
     if($this->files) return $this->files;
 
     $arr = $this->wire(new WireArray);
-    foreach($this->getDirs() as $dir) {
+    foreach($this->getDirs(true) as $dir) {
       $path = $this->toPath($dir);
       foreach($this->wire->files->find($path, [
         'extensions' => ['php'],
@@ -104,6 +105,29 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
   public function getFile($name) {
     if(!$this->files) return;
     return $this->files->get($name);
+  }
+
+  /**
+   * Create new RockMarkup file
+   */
+  public function createFile() {
+    $new = $this->input->post('new', 'string');
+    $dir = $this->input->post('dir', 'string');
+    if(!$new) return;
+    if(!$dir) return;
+
+    // check if directory is allowed
+    $dirs = $this->getDirs();
+    if(!in_array($dir, $dirs))
+      throw new WireException("$dir is not in allowed directories!");
+
+    // check writable
+    $path = $this->toPath($dir);
+    if(!is_writable($path)) throw new WireException("Folder $path not writable");
+
+    // create a new file and redirect
+    file_put_contents($path.$new.".php", "// your code here");
+    $this->session->redirect("./?name=$new");
   }
 
   /**
@@ -171,7 +195,6 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
     $f->label = 'Directories to scan';
     $f->required = true;
     $f->value = $data['dirs'];
-    $f->notes = $this->notes();
     $inputfields->add($f);
 
     return $inputfields;
