@@ -37,6 +37,16 @@ This field will then render the contents of `/site/assets/RockMarkup/mymarkup.ph
 /site/assets/RockMarkup/mymarkup.js
 ```
 
+## Adding dirs via hook
+
+```php
+$this->addHookAfter("RockMarkup::getDirs", function(HookEvent $event) {
+  $dirs = $event->return;
+  $dirs[] = '/site/modules/MyModule/RockMarkup/';
+  $event->return = $dirs;
+});
+```
+
 ## Setting a custom file path
 
 You can either set the file path via a field's config screen or just set the `path` property in your code:
