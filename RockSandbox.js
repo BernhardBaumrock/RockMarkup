@@ -18,7 +18,7 @@ $(document).on('size', '.RockMarkup', function(event) { logRockSandboxEvent(even
 $(document).ready(function() {
   // submit form on AJAX setting change
   $('#Inputfield_ajax').change(function() {
-    $(this).closest('form').submit();
+    $('#Inputfield_submit').click();
   });
 
   // copy text on click

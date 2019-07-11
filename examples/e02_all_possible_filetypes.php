@@ -5,6 +5,8 @@
  * when the field is opened. That's why there is a separate file for hooks
  * that is always executed in the admin on every pageload.
  */
-for($i = 0; $i<5; $i++) {
-  echo "<div>Line $i</div>";
-}
+
+// some api variables are available:
+echo "<p>Page being viewed/edited:"
+  ." #" . $page->id
+  ." (path: " . $page->path . " )";

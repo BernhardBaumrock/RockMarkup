@@ -22,30 +22,6 @@ class FieldtypeRockMarkup extends Fieldtype {
     $f->skipLabel = Inputfield::skipLabelBlank;
     return $f;
   }
-
-  /**
-   * Field configuration screen
-   * 
-   * @param Field $field
-   * @return InputfieldWrapper
-   *
-   */
-  public function ___getConfigInputfields(Field $field) {
-    $inputfields = parent::___getConfigInputfields($field);
-    $f = $this->modules->get('InputfieldRockMarkup');
-    $f->name = $field->name;
-
-    $inputfields->add([
-      'type' => 'text',
-      'name' => 'path',
-      'label' => $this->_('Custom File Path'),
-      'value' => $field->path,
-      'description' => $this->_('Relative to root folder, default is') . " xxx",
-      'notes' => $this->_('Current path') . ": xxx",
-    ]);
-
-    return $inputfields; 
-  }
   
   /**
    * the formatted value of this field

@@ -83,6 +83,7 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
         $hooks = $rmf->getAsset('hooks');
         if($hooks) {
           $this->wire->files->includeOnce($hooks->file, [
+            'rm' => $this,
             'wire' => $this->wire,
           ]);
         }

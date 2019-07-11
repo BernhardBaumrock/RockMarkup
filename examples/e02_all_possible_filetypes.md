@@ -2,15 +2,15 @@
 
 You can use these files:
 
-* **MD**
+* **md**
 to show descriptions (markdown)
-* **PHP**
+* **php**
 for the content of the field (regular php code)
 * **ready**
 for PHP code that is loaded on the Inputfield's renderReady event
-* **CSS**
+* **css**
 for loading additional style rules
-* **JS**
+* **js**
 for loading additional JavaScript
 * **hooks**
 for loading hooks

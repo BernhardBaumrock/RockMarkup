@@ -1,1 +1,4 @@
 /* todo: highlight.js code blocks do not show scrollbars */
+.Inputfield.scroll .InputfieldContent {
+  overflow-x: auto;
+}

@@ -2,6 +2,11 @@
 class RockMarkupFile extends WireData {
 
   /**
+   * @var RockMarkup;
+   */
+  public $rm;
+
+  /**
    * constructor
    */
   public function __construct($file) {
@@ -62,55 +67,99 @@ class RockMarkupFile extends WireData {
   }
 
   /**
-   * Render Code Inputfield for the Sandbox Process Module
+   * Rename all files
+   * 
+   * @param string $newname
+   * @return void
    */
-  public function renderCode() {
-    $link = 'vscode://file/%file:%line';
-    $tracy = $this->modules->get('TracyDebugger');
-    if($tracy AND $tracy->editor) $link = $tracy->editor;
+  public function rename($newname) {
+    $abort = false;
+    $newname = $this->sanitizer->fieldName($newname);
+    $newname = strtolower($newname); // not necessary but better for RockFinder
     
-    $out = '';
-    foreach($this->rm->extensions as $ext) {
-
-      $file = $this->getAsset($ext);
-      $code = "<a href='./?name={$this->name}&create=$ext'><i class='fa fa-plus'></i> Create file</a>";
-      $label = "{$this->name}.$ext";
-
-      if($file) {
-        $info = (object)pathinfo($file->file);
-
-        $lang = $info->extension;
-        if($lang == 'hooks') $lang = 'php';
-        if($lang == 'md') $lang = '';
-
-        $dir = $info->dirname;
-        $base = $info->basename;
-
-        // setup editor link
-        $url = str_replace("%file", "$dir/$base", $link);
-        $url = str_replace("%line", "1", $url);
-        $code = $this->sanitizer->entities(file_get_contents("$dir/$base"));
-        $code = "<pre class='uk-margin-small'><code class='$lang'>$code</code></pre>";
-
-        // markdown?
-        if($ext == 'md') {
-          require_once(__DIR__.'/lib/Parsedown.php');
-          $Parsedown = new \Parsedown();
-          $code = $Parsedown->text($this->wire->files->render("$dir/$base"));
-        }
-
-        $label = "<a href='$url'>$base</a>";
-      }
-      
-      // add line to table
-      $out .= "<tr>"
-        ."<td class='uk-text-nowrap'>"
-          .'<i class="fa fa-file-code-o uk-margin-small-right" aria-hidden="true"></i>'
-          .$label
-        ."</td>"
-        ."<td>$code</td>"
-        ."</tr>";
+    if(!$newname) {
+      $this->error("Invalid name - must be a valid PW fieldname!");
+      return;
     }
-    return $out;
+
+    // pre-check
+    $newfile = $this->rm->getFile($newname);
+    if($newfile) {
+      $this->error("File {$newfile->url} already exists");
+      $abort = true;
+    }
+
+    $renameField = $this->input->get('renameField', 'int');
+    $newfield = $this->fields->get($newname);
+    if($renameField AND $newfield) {
+      $this->error("Field $newfield already exists");
+      $abort = true;
+    }
+
+    if($abort) return;
+    
+
+    // rename files
+    foreach($this->files as $file) {
+      $info = (object)pathinfo($file);
+      $ext = $info->extension;
+      $this->wire->files->rename($file, "$newname.$ext");
+    }
+
+    // rename inputfield?
+    if($renameField) {
+      $field = $this->fields->get($this->name);
+      if($field) {
+        $field->name = $newname;
+        $field->save();
+      }
+    }
+
+    $this->session->redirect("./?name=$newname");
+  }
+
+  /**
+   * Delete all corresponding files
+   */
+  public function delete() {
+    $num = 0;
+    foreach($this->files as $file) {
+      $this->wire->files->unlink($file);
+      $num++;
+    }
+    $this->message("$num files were deleted.");
+
+    $field = $this->fields->get($this->name);
+    if($field) {
+      $this->warning("Remove this field manually if you don't need it any more.");
+      $this->session->redirect($this->config->urls->admin . "setup/fields/edit/?id=".$field->id);
+    }
+
+    $this->session->redirect("./");
+  }
+
+  /**
+   * Create pw field for this file
+   */
+  public function createField() {
+    $name = $this->name;
+
+    // early exit if field exists
+    $field = $this->fields->get($name);
+    if(!$field) {
+      $fieldname = $this->sanitizer->fieldName($name);
+      if(!$fieldname) throw new WireException("Invalid Fieldname: $name");
+      
+      $field = $this->wire(new Field);
+      $field->type = 'FieldtypeRockMarkup';
+      $field->name = $fieldname;
+      $field->save();
+    }
+    else {
+      $this->warning("Field $field does already exist!");
+    }
+
+    // redirect to file sandbox
+    $this->session->redirect("./?name=$name");
   }
 }

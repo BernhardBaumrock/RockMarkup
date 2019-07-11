@@ -64,7 +64,7 @@ class InputfieldRockMarkup extends InputfieldMarkup {
     // load ready file
     $ready = $file->getAsset('ready');
     if($ready) $this->files->include($ready->file, [
-      'module' => $this,
+      'field' => $this,
       'rm' => $this->rm,
     ]);
     
@@ -91,15 +91,24 @@ class InputfieldRockMarkup extends InputfieldMarkup {
     // get file
     $name = $this->name;
     $file = $this->rm->getFile($name);
-    if(!$file) throw new WireException("No file found for $name.");
+    if(!$file) return "No file found for field $name";
     
     // if a value was set return it
     if($this->value) $out = $this->value;
     else {
       // otherwise try to render the file
       try {
+        // get page object
+        $page = $this->page;
+        if($this->process == 'ProcessPageEdit') {
+          $page = $this->process->getPage();
+        }
+
+        // get markup
         $out = $this->files->render($file->path, [
           'that' => $this, // can be used to attach hooks
+          'page' => $page,
+          'pages' => $this->pages,
         ], [
           'allowedPaths' => [$file->path],
         ]);

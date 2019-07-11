@@ -42,19 +42,37 @@ $form->add($f);
 $form->add([
   'type' => 'RockMarkup', // todo: str_replace('Process', '', $sandbox->className),
   'name' => $name,
-  'label' => 'Result',
+  'label' => "Inputfield_$name",
   'collapsed' => $isAjax ? Inputfield::collapsedYesAjax : Inputfield::collapsedNo,
 ]);
 
 // add code
 $form->add([
   'type' => 'markup',
-  'name' => "code_$name",
-  'label' => '',
+  'name' => $name."_code",
+  'label' => 'Files',
   'icon' => 'code',
+  'class' => 'scroll',
   'value' => $this->files->render(__DIR__ . '/code', [
     'file' => $file,
   ]),
+]);
+
+// add actions
+$fs = $this->modules->get('InputfieldFieldset');
+$fs->name = $name."_actions";
+$fs->label = 'Actions';
+// $fs->collapsed = Inputfield::collapsedYes;
+$fs->icon = 'bolt';
+$this->files->include('actions', [
+  'fs' => $fs,
+  'file' => $file,
+]);
+$form->add($fs);
+
+$form->add([
+  'type' => 'submit',
+  'name' => 'submit',
 ]);
 ?>
 
