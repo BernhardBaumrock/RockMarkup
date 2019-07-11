@@ -18,7 +18,7 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
    * Possible extensions for RockMarkupFiles
    * @var array
    */
-  public $extensions = ['md', 'php', 'css', 'js', 'hooks'];
+  public $extensions = ['md', 'php', 'css', 'js', 'hooks', 'ready'];
 
   /**
    * Array of all RockMarkupFiles
@@ -117,7 +117,7 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
     if(!$dir) return;
 
     // check if directory is allowed
-    $dirs = $this->getDirs();
+    $dirs = $this->getDirs(true);
     if(!in_array($dir, $dirs))
       throw new WireException("$dir is not in allowed directories!");
 

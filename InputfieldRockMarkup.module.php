@@ -52,11 +52,21 @@ class InputfieldRockMarkup extends InputfieldMarkup {
     $file = $this->rm->getFile($this->name);
     if(!$file) return;
 
+    // add field name to inputfield
+    $this->wrapAttr('data-name', $this->name);
+
     // add css + js
     $css = $file->getAsset('css');
     $js = $file->getAsset('js');
     if($css) $this->config->styles->add($this->rm->toUrl($css->file).'?t='.filemtime($css->file));
     if($js) $this->config->scripts->add($this->rm->toUrl($js->file).'?t='.filemtime($js->file));
+
+    // load ready file
+    $ready = $file->getAsset('ready');
+    if($ready) $this->files->include($ready->file, [
+      'module' => $this,
+      'rm' => $this->rm,
+    ]);
     
     return parent::renderReady($parent, $renderValueMode);
   }

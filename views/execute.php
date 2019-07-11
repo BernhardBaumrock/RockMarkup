@@ -19,9 +19,6 @@ $url = "{$this->config->urls->admin}module/edit?name={$rm->className}";
         foreach($rm->getFilesInDir($dir) as $file) {
           echo "<a href='./?name={$file->name}'>{$file->name}</a><br>";
         }
-        
-        // skip example dir
-        if(!in_array($dir, $rm->getDirs())) continue;
 
         // is folder writable?
         $input = $this->modules->get('InputfieldText');
