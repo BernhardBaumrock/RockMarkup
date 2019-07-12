@@ -58,6 +58,18 @@ $form->add([
   ]),
 ]);
 
+// add info
+$form->add([
+  'type' => 'markup',
+  'name' => "info",
+  'label' => 'Info',
+  'icon' => 'info',
+  'collapsed' => Inputfield::collapsedYes,
+  'value' => $this->files->render(__DIR__ . '/info', [
+    'file' => $file,
+  ]),
+]);
+
 // add actions
 $fs = $this->modules->get('InputfieldFieldset');
 $fs->name = $name."_actions";

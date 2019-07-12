@@ -27,14 +27,5 @@
         </a>
       </td>
     </tr>
-    <tr>
-      <td class='uk-width-auto uk-text-nowrap'>PW Field</td>
-      <td class='uk-width-expand'>
-        <a href=# class='copy'>
-          <i class="fa fa-clone uk-margin-small-right" aria-hidden="true"></i>
-          <span>xxx</span>
-        </a>
-      </td>
-    </tr>
   </tbody>
 </table>

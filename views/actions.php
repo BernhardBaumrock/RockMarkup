@@ -1,15 +1,4 @@
 <?php namespace ProcessWire;
-// add info
-$fs->add([
-  'type' => 'markup',
-  'name' => "info",
-  'label' => 'Info',
-  'icon' => 'info',
-  'collapsed' => Inputfield::collapsedYes,
-  'value' => $this->files->render(__DIR__ . '/info', [
-    'file' => $file,
-  ]),
-]);
 
 // rename files
 $rename = $this->input->get('rename', 'string');
