@@ -56,6 +56,7 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
    */
   public function init() {
     $this->getFiles();
+    $this->addHookBefore("Modules::uninstall", $this, "customUninstall");
   }
 
   /**
@@ -198,7 +199,6 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
     return $this->config->paths->root.ltrim($url,"/");
   }
 
-
   /** ########## Module Info and Config ########## */
 
   // todo: path sanitizations
@@ -218,5 +218,47 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
     $inputfields->add($f);
 
     return $inputfields;
+  }
+
+  /**
+   * Custom uninstall routine
+   * 
+   * @param HookEvent $event
+   */
+  public function customUninstall($event) {
+    $installs = $this->getModuleInfo();
+    $class = $event->arguments(0);
+    $url = "./edit?name=$class";
+
+    // exit when class does not match
+    if(!in_array($class, $installs)) return;
+    
+    // intercept uninstall
+    $abort = false;
+
+    // if it is not the main module we redirect to the main module's config
+    if($class != 'RockMarkup') {
+      $abort = true;
+      $url = "./edit?name=RockMarkup";
+      $this->error('Please uninstall the main module');
+    }
+    
+    // check if any fields exist
+    $fields = $this->wire->fields->find('type=FieldtypeRockMarkup')->count();
+    if($fields > 0) {
+      $this->error('Remove all fields of type RockMarkup before uninstall!');
+      $abort = true;
+    }
+
+    // on uninstall of the main module we remove this hook so that it does
+    // not interfere with the auto-uninstall submodules
+    if($class == 'RockMarkup') $event->removeHook(null);
+
+    // uninstall?
+    if($abort) {
+      // there where some errors
+      $event->replace = true; // prevents original uninstall
+      $this->session->redirect($url); // prevent "module uninstalled" message
+    }
   }
 }
