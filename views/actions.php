@@ -36,7 +36,7 @@ $field = $this->fields->get($file->name);
 $desc = '';
 if($field) {
   $desc = 'The PW field has to be removed manually: '
-  ."<a href='{$this->config->urls->admin}setup/field/edit/?id={$field->id}'>$field</a>";
+  ."<a href='{$this->config->urls->admin}setup/field/edit?id={$field->id}'>$field</a>";
 }
 $fset->add([
   'type' => 'checkbox',

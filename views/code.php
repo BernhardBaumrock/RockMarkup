@@ -55,7 +55,7 @@ if($createField) $file->createField();
 // add link to pw field
 $field = $this->fields->get($file->name);
 if($field) {
-  $url = $this->config->urls->admin . "setup/field/edit/?id=".$field->id;
+  $url = $this->config->urls->admin . "setup/field/edit?id=".$field->id;
   $pwfield = "<a href='$url'>"
     ."<i class='fa fa-edit'></i> {$file->name}"
     ."</a>";
