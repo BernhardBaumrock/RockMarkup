@@ -8,6 +8,16 @@
  */
 class FieldtypeRockMarkup extends Fieldtype {
 
+  public static function getModuleInfo() {
+    return [
+      'title' => 'RockMarkup',
+      'version' => '0.0.1',
+      'author' => 'Bernhard Baumrock',
+      'icon' => 'code',
+      'requires' => ['RockMarkup'],
+    ];
+  }
+
   /**
    * module initialisation
    */
@@ -19,7 +29,6 @@ class FieldtypeRockMarkup extends Fieldtype {
    */
   public function getInputfield(Page $page, Field $field) {
     $f = $this->modules->get('InputfieldRockMarkup');
-    $f->skipLabel = Inputfield::skipLabelBlank;
     return $f;
   }
   

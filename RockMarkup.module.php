@@ -8,6 +8,22 @@
 require_once("RockMarkupFile.php");
 class RockMarkup extends WireData implements Module, ConfigurableModule {
 
+  public static function getModuleInfo() {
+    return array(
+      'title' => 'RockMarkup Main Module',
+      'version' => '0.0.1',
+      'summary' => 'RockMarkup Main Module that installs and uninstalls all related modules.',
+      'singular' => true,
+      'autoload' => 'template=admin',
+      'icon' => 'bolt',
+      'installs' => [
+        'FieldtypeRockMarkup',
+        'InputfieldRockMarkup',
+        'ProcessRockMarkup',
+      ],
+    );
+  }
+  
   /**
    * Directory with example files
    * @var string
@@ -124,6 +140,7 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
 
     // check writable
     $path = $this->toPath($dir);
+    if(!is_dir($path)) $this->wire->files->mkdir($path);
     if(!is_writable($path)) throw new WireException("Folder $path not writable");
 
     // create a new file and redirect
@@ -182,10 +199,12 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
   }
 
 
-  /** ########## Module Config ########## */
+  /** ########## Module Info and Config ########## */
+
   // todo: path sanitizations
   static protected $defaults = array(
-    'dirs' => "/site/assets/RockMarkup/",
+    'dirs' => "/site/assets/RockMarkup/"
+      ."\n/site/templates/RockMarkup/",
   );
   public function getModuleConfigInputfields(array $data) {
     $inputfields = new InputfieldWrapper();

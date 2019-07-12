@@ -8,6 +8,17 @@
  */
 class InputfieldRockMarkup extends InputfieldMarkup {
 
+  public static function getModuleInfo() {
+    return [
+      'title' => 'RockMarkup Inputfield', 
+      'summary' => 'Inputfield to display any markup in the PW backend.',
+      'version' => '0.0.1',
+      'author' => 'Bernhard Baumrock',
+      'icon' => 'code',
+      'requires' => ['RockMarkup'],
+    ];
+  }
+
   /**
    * Reference to RockMarkup Module
    */
