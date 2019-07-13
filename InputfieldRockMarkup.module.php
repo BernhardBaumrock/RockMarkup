@@ -51,7 +51,7 @@ class InputfieldRockMarkup extends InputfieldMarkup {
 
     $content = $this->getContent();
     $script = $this->getScriptTag();
-    return $content.$script;
+    return '<div class="RockMarkupOutput">' . $content.$script . '</div>';
   }
   
   /**
