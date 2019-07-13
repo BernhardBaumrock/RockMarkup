@@ -47,8 +47,6 @@ class InputfieldRockMarkup extends InputfieldMarkup {
    * @return void
    */
   public function ___render() {
-    $this->setLabel();
-
     $content = $this->getContent();
     $script = $this->getScriptTag();
     return '<div class="RockMarkupOutput">' . $content.$script . '</div>';
@@ -60,6 +58,8 @@ class InputfieldRockMarkup extends InputfieldMarkup {
    * MUST NOT be hookable!
    */
   public function renderReady(Inputfield $parent = null, $renderValueMode = false) {
+    $this->setLabel();
+
     $file = $this->rm->getFile($this->name);
     if(!$file) return;
 
