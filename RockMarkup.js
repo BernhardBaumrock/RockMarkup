@@ -7,11 +7,18 @@ function RockMarkup() {
 /**
  * Custom log function
  * 
- * This will log only if PW debug mode is true.
+ * This will log only if PW debug mode is ON.
  */
 RockMarkup.prototype.log = function(...str) {
   if(!ProcessWire.config.debug) return;
   console.log(...str);
+}
+
+/**
+ * Get field data from dom data attribute
+ */
+RockMarkup.prototype.getFieldData = function(el) {
+  return $(el).find('.RockMarkupOutput').data('jsdata') || {};
 }
 
 /**

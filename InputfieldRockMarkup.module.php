@@ -25,6 +25,12 @@ class InputfieldRockMarkup extends InputfieldMarkup {
   private $rm;
 
   /**
+   * Variable holding all JS data
+   * @var WireArray
+   */
+  private $jsData;
+
+  /**
    * Init this module
    *
    * @return void
@@ -32,6 +38,9 @@ class InputfieldRockMarkup extends InputfieldMarkup {
   public function init() {
     parent::init();
     $this->rm = $this->modules->get('RockMarkup');
+
+    // set js config var
+    $this->jsData = $this->wire(new WireArray);
 
     // add the RockMarkup class to this field
     // this class is also added from derived fields (like RockTabulator)
@@ -49,7 +58,8 @@ class InputfieldRockMarkup extends InputfieldMarkup {
   public function ___render() {
     $content = $this->getContent();
     $script = $this->getScriptTag();
-    return '<div class="RockMarkupOutput">' . $content.$script . '</div>';
+    $jsData = $this->getJsData();
+    return "<div class='RockMarkupOutput' $jsData>" . $content.$script . "</div>";
   }
   
   /**
@@ -74,12 +84,38 @@ class InputfieldRockMarkup extends InputfieldMarkup {
 
     // load ready file
     $ready = $file->getAsset('ready');
-    if($ready) $this->files->include($ready->file, [
-      'field' => $this,
+    if($ready) $this->files->include($ready->file, $this->getAPI([
+      'inputfield' => $this,
       'rm' => $this->rm,
-    ]);
+    ]));
     
     return parent::renderReady($parent, $renderValueMode);
+  }
+
+  /**
+   * Return jsData string
+   * @return string
+   */
+  public function getJsData() {
+    $json = json_encode($this->jsData->getArray());
+    return "data-jsData='$json'";
+  }
+
+  /**
+   * Set JS config variable
+   * 
+   * @param string|array $key
+   * @param mixed $value
+   */
+  public function js($key, $value = null) {
+    // if an array was provided we set all single items
+    if(is_array($key)) {
+      foreach($key as $k=>$v) $this->js($k, $v);
+      return;
+    }
+
+    // set key value pair
+    $this->jsData->set($key, $value);
   }
 
   /**
@@ -91,6 +127,14 @@ class InputfieldRockMarkup extends InputfieldMarkup {
       // if label is not NULL we set the field name as label
       if(!$this->hideLabel) $this->label = $this->name;
     }
+  }
+
+  /**
+   * Get all API variables and merge them with array
+   */
+  public function getAPI($array = []) {
+    if(!is_array($array)) throw new WireException("Please provide a PHP array!");
+    return array_merge($this->wire('all')->getArray(), $array);
   }
 
   /**
@@ -116,11 +160,10 @@ class InputfieldRockMarkup extends InputfieldMarkup {
         }
 
         // get markup
-        $out = $this->files->render($file->path, [
-          'that' => $this, // can be used to attach hooks
-          'page' => $page,
-          'pages' => $this->pages,
-        ], [
+        $out = $this->files->render($file->path, $this->getAPI([
+          'inputfield' => $this,
+          'rm' => $this->rm,
+        ]), [
           'allowedPaths' => [$file->path],
         ]);
       } catch (\Throwable $th) {
