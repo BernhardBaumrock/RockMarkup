@@ -7,6 +7,8 @@ $url = "{$this->config->urls->admin}module/edit?name={$rm->className}";
 <p>
   List of all RockMarkup files. Add directories in the 
   <a href="<?= $url ?>">module's config</a> or via RockMarkup::getDirs hook.
+  Please also see the <a href="https://github.com/BernhardBaumrock/RockMarkup">
+  readme of the module</a>.
 </p>
 
 <ul uk-accordion>
@@ -25,6 +27,7 @@ $url = "{$this->config->urls->admin}module/edit?name={$rm->className}";
         $input->type = 'text';
         $input->name = 'new';
         $input->label = 'Create new file';
+        $input->notes = 'Make sure that your name is a valid PW fieldname and is unique across your installation!';
 
         if(!is_dir($rm->toPath($dir)))
           $input->error("Folder $dir does not exist");

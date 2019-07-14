@@ -189,4 +189,21 @@ class InputfieldRockMarkup extends InputfieldMarkup {
     // show spinner and fire loaded event
     return "<script>$('#Inputfield_{$this->name}').trigger('loaded');</script>";
   }
+
+  /**
+   * Inputfield config fields
+   */
+  public function ___getConfigInputfields() {
+    // Get the defaults and $inputfields wrapper we can add to
+    $inputfields = parent::___getConfigInputfields();
+    $url = $this->config->urls->admin ."setup/rockmarkup/?name=".$this->name;
+    
+    // list all related files
+    $f = $this->wire('modules')->get('InputfieldMarkup');
+    $f->label = 'Sandbox';
+    $f->value = "<p>RockMarkup Sandbox: <a href='$url'>$url</a></p>";
+    $inputfields->add($f);
+
+    return $inputfields;
+  }
 }

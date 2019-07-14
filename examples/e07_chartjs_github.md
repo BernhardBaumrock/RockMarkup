@@ -1,0 +1,1 @@
+This example shows how JS variables can be passed from PHP to JS

@@ -1,1 +1,1 @@
-<canvas id="myChart"></canvas>
+<canvas id="myChart_e06"></canvas>

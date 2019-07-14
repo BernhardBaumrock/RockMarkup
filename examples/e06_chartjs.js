@@ -1,5 +1,5 @@
-$(document).on('loaded', '.RockMarkup', function(event) {
-  var ctx = document.getElementById('myChart');
+$(document).on('loaded', '.RockMarkup[data-name=e06_chartjs]', function(event) {
+  var ctx = document.getElementById('myChart_e06');
   var myChart = new Chart(ctx, {
     type: 'bar',
     data: {

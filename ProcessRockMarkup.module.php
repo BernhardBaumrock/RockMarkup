@@ -42,6 +42,12 @@ class ProcessRockMarkup extends Process {
       // create file?
       $this->createFile();
 
+      // if the field does not exist we redirect to the overview page
+      if(!$this->rm->getFile($name)) {
+        $this->error("No PHP file for $name found - please create it!");
+        $this->session->redirect('./');
+      }
+
       // render example
       return $this->files->render(__DIR__ . '/views/example', [
         'rm' => $this->rm,
@@ -53,6 +59,22 @@ class ProcessRockMarkup extends Process {
     return $this->files->render(__DIR__ . '/views/execute', [
       'rm' => $this->rm,
     ]);
+  }
+
+  /**
+   * Example ProcessModule
+   */
+  public function executeProcessExample() {
+    /** @var InputfieldForm $form */
+    $form = $this->modules->get('InputfieldForm');
+    $this->headline('Example of a RockMarkup field in a ProcessModule');
+  
+    $form->add([
+      'name' => 'e07_chartjs_github',
+      'type' => 'RockMarkup',
+    ]);
+  
+    return $form->render();
   }
 
   /**
