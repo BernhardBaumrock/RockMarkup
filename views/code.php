@@ -50,7 +50,7 @@ foreach($rm->extensions as $ext) {
 
 // create field if link was clicked
 $createField = $this->input->get('pwfield', 'int');
-if($createField) $file->createField();
+if($createField) $file->createField((string)$this->process->main());
 
 // add link to pw field
 $field = $this->fields->get($file->name);

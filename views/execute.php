@@ -1,24 +1,25 @@
 <?php namespace ProcessWire;
 // create file if form was submitted
-$rm->createFile();
-$url = "{$this->config->urls->admin}module/edit?name={$rm->className}";
+$main = $this->modules->get(str_replace('Process', '', $this->process));
+$url = "{$this->config->urls->admin}module/edit?name={$main->className}";
+$main->createFile();
 ?>
 
 <p>
-  List of all RockMarkup files. Add directories in the 
-  <a href="<?= $url ?>">module's config</a> or via RockMarkup::getDirs hook.
-  Please also see the <a href="https://github.com/BernhardBaumrock/RockMarkup">
+  List of all <?= $main ?> files. Add directories in the 
+  <a href="<?= $url ?>">module's config</a> or via <?= $main ?>::getDirs hook.
+  Please also see the <a href="https://github.com/BernhardBaumrock/<?= $main ?>">
   readme of the module</a>.
 </p>
 
 <ul uk-accordion>
-  <?php foreach($rm->getDirs(true) as $dir): ?>
+  <?php foreach($main->getDirs(true) as $dir): ?>
     <li>
       <a class="uk-accordion-title" href="#"><?= $dir ?></a>
       <div class="uk-accordion-content uk-margin-left">
         <?php
         // list files
-        foreach($rm->getFilesInDir($dir) as $file) {
+        foreach($main->getFilesInDir($dir) as $file) {
           echo "<a href='./?name={$file->name}'>{$file->name}</a><br>";
         }
 

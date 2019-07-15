@@ -7,12 +7,35 @@
  */
 class ProcessRockMarkup extends Process {
 
+  public static function getModuleInfo() {
+    return [
+      'title' => 'ProcessRockMarkup',
+      'summary' => 'RockMarkup Process Module (Sandbox).',
+      'version' => 1,
+      'author' => 'Bernhard Baumrock',
+      'icon' => 'code',
+      'requires' => ['RockMarkup'],
+      'page' => [
+        'name' => 'rockmarkup',
+        'title' => 'RockMarkup',
+        'parent' => 'setup',
+      ],
+    ];
+  }
+
   /**
    * Reference to RockMarkup module
    * 
    * @var RockMarkup
    */
   private $rm;
+  
+  /**
+   * isRockMarkup flag
+   * 
+   * This flag is necessary for the uninstallation process
+   */
+  public $isRockMarkup = true;
 
   /**
    * Init. Optional.
@@ -43,14 +66,14 @@ class ProcessRockMarkup extends Process {
       $this->createFile();
 
       // if the field does not exist we redirect to the overview page
-      if(!$this->rm->getFile($name)) {
+      if(!$this->main()->getFile($name)) {
         $this->error("No PHP file for $name found - please create it!");
         $this->session->redirect('./');
       }
 
       // render example
       return $this->files->render(__DIR__ . '/views/example', [
-        'rm' => $this->rm,
+        'main' => $this->main(),
         'name' => $name,
       ]);
     }
@@ -78,6 +101,13 @@ class ProcessRockMarkup extends Process {
   }
 
   /**
+   * Get Main Module from current process
+   */
+  public function main() {
+    return $this->modules->get(str_replace('Process', '', $this->process));
+  }
+
+  /**
    * Create file?
    */
   public function createFile() {
@@ -87,7 +117,7 @@ class ProcessRockMarkup extends Process {
     $ext = $this->input->get('create', 'string');
     if(!$ext) return;
 
-    $file = $this->rm->getFile($name);
+    $file = $this->main()->getFile($name);
     if(!$file) return;
 
     $asset = $file->getAsset($ext);

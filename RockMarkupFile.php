@@ -140,8 +140,9 @@ class RockMarkupFile extends WireData {
 
   /**
    * Create pw field for this file
+   * @param string $type PW Fieldtype
    */
-  public function createField() {
+  public function createField($type) {
     $name = $this->name;
 
     // early exit if field exists
@@ -151,7 +152,7 @@ class RockMarkupFile extends WireData {
       if(!$fieldname) throw new WireException("Invalid Fieldname: $name");
       
       $field = $this->wire(new Field);
-      $field->type = 'FieldtypeRockMarkup';
+      $field->type = $type;
       $field->name = $fieldname;
       $field->save();
     }

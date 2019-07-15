@@ -17,6 +17,13 @@ class FieldtypeRockMarkup extends Fieldtype {
       'requires' => ['RockMarkup'],
     ];
   }
+  
+  /**
+   * isRockMarkup flag
+   * 
+   * This flag is necessary for the uninstallation process
+   */
+  public $isRockMarkup = true;
 
   /**
    * module initialisation
@@ -28,7 +35,7 @@ class FieldtypeRockMarkup extends Fieldtype {
    * Return the associated Inputfield
    */
   public function getInputfield(Page $page, Field $field) {
-    $f = $this->modules->get('InputfieldRockMarkup');
+    $f = $this->modules->get(str_replace('Fieldtype', 'Inputfield', (string)$this));
     return $f;
   }
   

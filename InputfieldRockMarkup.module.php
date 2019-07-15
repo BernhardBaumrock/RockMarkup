@@ -29,6 +29,13 @@ class InputfieldRockMarkup extends InputfieldMarkup {
    * @var WireArray
    */
   private $jsData;
+  
+  /**
+   * isRockMarkup flag
+   * 
+   * This flag is necessary for the uninstallation process
+   */
+  public $isRockMarkup = true;
 
   /**
    * Init this module
@@ -70,7 +77,7 @@ class InputfieldRockMarkup extends InputfieldMarkup {
   public function renderReady(Inputfield $parent = null, $renderValueMode = false) {
     $this->setLabel();
 
-    $file = $this->rm->getFile($this->name);
+    $file = $this->main()->getFile($this->name);
     if(!$file) return;
 
     // add field name to inputfield
@@ -90,6 +97,13 @@ class InputfieldRockMarkup extends InputfieldMarkup {
     ]));
     
     return parent::renderReady($parent, $renderValueMode);
+  }
+
+  /**
+   * Return main module
+   */
+  public function main() {
+    return $this->modules->get(str_replace('Inputfield', '', (string)$this));
   }
 
   /**
@@ -145,7 +159,7 @@ class InputfieldRockMarkup extends InputfieldMarkup {
 
     // get file
     $name = $this->name;
-    $file = $this->rm->getFile($name);
+    $file = $this->main()->getFile($name);
     if(!$file) return "No file found for field $name";
     
     // if a value was set return it
@@ -196,7 +210,7 @@ class InputfieldRockMarkup extends InputfieldMarkup {
   public function ___getConfigInputfields() {
     // Get the defaults and $inputfields wrapper we can add to
     $inputfields = parent::___getConfigInputfields();
-    $url = $this->config->urls->admin ."setup/rockmarkup/?name=".$this->name;
+    $url = $this->config->urls->admin ."setup/" . $this->main() . "/?name=".$this->name;
     
     // list all related files
     $f = $this->wire('modules')->get('InputfieldMarkup');

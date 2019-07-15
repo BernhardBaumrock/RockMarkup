@@ -6,7 +6,7 @@ $form->name = 'example';
 $form->method = 'GET';
 
 // get file
-$file = $rm->getFile($name);
+$file = $main->getFile($name);
 if(!$file) return;
 
 // add hidden name field
@@ -40,7 +40,7 @@ $form->add($f);
 
 // add rendered grid
 $form->add([
-  'type' => 'RockMarkup', // todo: str_replace('Process', '', $sandbox->className),
+  'type' => $main, // RockMarkup or derived class
   'name' => $name,
   'label' => "Inputfield_$name",
   'collapsed' => $isAjax ? Inputfield::collapsedYesAjax : Inputfield::collapsedNo,

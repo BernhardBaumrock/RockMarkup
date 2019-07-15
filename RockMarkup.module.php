@@ -7,7 +7,6 @@
  */
 require_once("RockMarkupFile.php");
 class RockMarkup extends WireData implements Module, ConfigurableModule {
-
   public static function getModuleInfo() {
     return array(
       'title' => 'RockMarkup Main Module',
@@ -22,6 +21,23 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
         'ProcessRockMarkup',
       ],
     );
+  }
+  static protected $defaults = array(
+    'dirs' => "tmp",
+  );
+  public function getModuleConfigInputfields(array $data) {
+    $inputfields = new InputfieldWrapper();
+    $data = array_merge(self::$defaults, $data);
+
+    $f = $this->modules->get('InputfieldTextarea');
+    $f->name = 'dirs';
+    $f->label = 'Directories to scan';
+    $f->required = true;
+    $f->value = $data['dirs'];
+    $f->notes = "Path relative to site root, must begin and end with a slash!";
+    $inputfields->add($f);
+
+    return $inputfields;
   }
   
   /**
@@ -42,21 +58,30 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
    */
   private $files;
 
+  /**
+   * isRockMarkup flag
+   * 
+   * This flag is necessary for the uninstallation process
+   */
+  public $isRockMarkup = true;
+  public $isRockMarkupMain = true;
+  
   public function __construct() {
     // populate defaults, which will get replaced with actual
     // configured values before the init/ready methods are called
     $this->setArray(self::$defaults);
-
-    // example directory
-    $this->exampleDir = $this->config->urls($this)."examples/";
   }
 
   /**
    * Initialize the module (optional)
    */
   public function init() {
+    $this->exampleDir = $this->config->urls($this)."examples/";
     $this->getFiles();
-    $this->addHookBefore("Modules::uninstall", $this, "customUninstall");
+
+    if($this->className == 'RockMarkup') {
+      $this->addHookBefore("Modules::uninstall", $this, "customUninstall");
+    }
   }
 
   /**
@@ -199,66 +224,57 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
     return $this->config->paths->root.ltrim($url,"/");
   }
 
-  /** ########## Module Info and Config ########## */
-
-  // todo: path sanitizations
-  static protected $defaults = array(
-    'dirs' => "/site/assets/RockMarkup/"
-      ."\n/site/templates/RockMarkup/",
-  );
-  public function getModuleConfigInputfields(array $data) {
-    $inputfields = new InputfieldWrapper();
-    $data = array_merge(self::$defaults, $data);
-
-    $f = $this->modules->get('InputfieldTextarea');
-    $f->name = 'dirs';
-    $f->label = 'Directories to scan';
-    $f->required = true;
-    $f->value = $data['dirs'];
-    $inputfields->add($f);
-
-    return $inputfields;
-  }
-
   /**
    * Custom uninstall routine
    * 
    * @param HookEvent $event
    */
   public function customUninstall($event) {
-    $installs = $this->getModuleInfo();
     $class = $event->arguments(0);
     $url = "./edit?name=$class";
 
-    // exit when class does not match
-    if(!in_array($class, $installs)) return;
+    // is this a rockmarkup derived class?
+    $module = $this->modules->get($class);
+    if(!$module->isRockMarkup) return;
     
-    // intercept uninstall
+    // if it is not the main module redirect to it
+    if(!$module->isRockMarkupMain) {
+      $main = str_replace(['Fieldtype', 'Inputfield', 'Process'], '', $class);
+      $this->error('Please uninstall the main module');
+      $event->replace = true;
+      $url = "./edit?name=$main";
+      $this->session->redirect($url);
+      return;
+    }
+    
+    // ### main module uninstall ###
     $abort = false;
 
-    // if it is not the main module we redirect to the main module's config
-    if($class != 'RockMarkup') {
-      $abort = true;
-      $url = "./edit?name=RockMarkup";
-      $this->error('Please uninstall the main module');
-    }
-    
-    // check if any fields exist
-    $fields = $this->wire->fields->find('type=FieldtypeRockMarkup')->count();
-    if($fields > 0) {
-      $this->error('Remove all fields of type RockMarkup before uninstall!');
-      $abort = true;
-    }
+    // we remove this hook so that it does not interfere with submodule-uninstalls
+    $event->removeHook(null);
 
-    // on uninstall of the main module we remove this hook so that it does
-    // not interfere with the auto-uninstall submodules
-    if($class == 'RockMarkup') $event->removeHook(null);
+    // check if any fields exist
+    $fields = $this->wire->fields->find("type=Fieldtype$class")->count();
+    if($fields > 0) {
+      $this->error("Remove all fields of type $class before uninstall!");
+      $abort = true;
+    }
 
     // uninstall?
     if($abort) {
-      // there where some errors
+      // there where some errors, don't execute uninstall
       $event->replace = true; // prevents original uninstall
       $this->session->redirect($url); // prevent "module uninstalled" message
     }
+  }
+
+  /**
+   * Install routine
+   */
+  public function ___install() {
+    $name = $this->className;
+    $this->modules->saveConfig($this, [
+      'dirs' => "/site/assets/$name/\n/site/templates/$name/",
+    ]);
   }
 }
