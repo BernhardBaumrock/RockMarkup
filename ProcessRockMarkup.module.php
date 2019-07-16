@@ -58,7 +58,7 @@ class ProcessRockMarkup extends Process {
   public function execute() {
     $name = $this->input->get('name', 'text');
     $this->headline($name);
-    $this->browserTitle("Sandbox: $name");
+    $this->browserTitle($this->main() . ": $name");
 
     // single example view
     if($name) {

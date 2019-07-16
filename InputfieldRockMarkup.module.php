@@ -22,7 +22,7 @@ class InputfieldRockMarkup extends InputfieldMarkup {
   /**
    * Reference to RockMarkup Module
    */
-  private $rm;
+  protected $rm;
 
   /**
    * Variable holding all JS data
@@ -215,7 +215,7 @@ class InputfieldRockMarkup extends InputfieldMarkup {
     // list all related files
     $f = $this->wire('modules')->get('InputfieldMarkup');
     $f->label = 'Sandbox';
-    $f->value = "<p>RockMarkup Sandbox: <a href='$url'>$url</a></p>";
+    $f->value = "<p><a href='$url'>$url</a></p>";
     $inputfields->add($f);
 
     return $inputfields;
