@@ -28,6 +28,9 @@ foreach($rm->extensions as $ext) {
     $code = $this->sanitizer->entities(file_get_contents("$dir/$base"));
     $code = "<pre class='uk-margin-small'><code class='$lang'>$code</code></pre>";
 
+    // call hookable function
+    $code = $rm->getCodeMarkup($code, $ext);
+
     // markdown?
     if($ext == 'md') {
       require_once('../lib/Parsedown.php');

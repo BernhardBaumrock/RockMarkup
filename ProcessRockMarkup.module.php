@@ -55,7 +55,7 @@ class ProcessRockMarkup extends Process {
   /**
    * Main execute method
    */
-  public function execute() {
+  public function ___execute() {
     $name = $this->input->get('name', 'text');
     $this->headline($name);
     $this->browserTitle($this->main() . ": $name");
@@ -125,8 +125,28 @@ class ProcessRockMarkup extends Process {
     
     // create file and redirect
     $new = "{$file->dir}$name.$ext"; 
-    file_put_contents($new, "");
+    file_put_contents($new, $this->getNewFileContent($ext, [
+      'name' => $name,
+    ]));
     $this->session->redirect("./?name=$name");
   }
-}
 
+  /**
+   * Get example content for new file
+   */
+  public function getNewFileContent($ext, $vars = []) {
+    $path = $this->config->paths($this);
+    $file = $path."snippets/$ext.$ext";
+    if(!is_file($file)) return;
+    switch($ext) {
+      case 'ready':
+      case 'hooks':
+        $content = file_get_contents($file);
+        break;
+      default:
+        $content = $this->wire->files->render($file, $vars);
+    }
+    
+    return $content;
+  }
+}

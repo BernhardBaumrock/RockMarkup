@@ -145,7 +145,8 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
    * @param string $name
    * @return RockMarkupFile
    */
-  public function getFile($name) {
+  public function getFile($name = null) {
+    if(!$name) $name = $this->input->get('name', 'string');
     if(!$this->files) return;
     return $this->files->get($name);
   }
@@ -170,8 +171,22 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
     if(!is_writable($path)) throw new WireException("Folder $path not writable");
 
     // create a new file and redirect
-    file_put_contents($path.$new.".php", "// your code here");
+    file_put_contents($path.$new.".php", $this->getPhpCode());
     $this->session->redirect("./?name=$new");
+  }
+
+  /**
+   * Get example PHP code for main PHP file
+   */
+  public function getPhpCode() {
+    return "<?php\n// your code here";
+  }
+
+  /**
+   * Function to make the code markup hookable
+   */
+  public function ___getCodeMarkup($html, $ext) {
+    return $html;
   }
 
   /**
