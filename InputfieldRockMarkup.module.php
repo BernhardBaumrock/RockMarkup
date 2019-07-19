@@ -94,7 +94,9 @@ class InputfieldRockMarkup extends InputfieldMarkup {
     if($ready) $this->files->include($ready->file, $this->getAPI([
       'inputfield' => $this,
       'rm' => $this->rm,
-    ]));
+    ]), [
+      'allowedPaths' => [$ready->dirname],
+    ]);
 
     // load global config
     // this is done for each field so that each field can modify settings
