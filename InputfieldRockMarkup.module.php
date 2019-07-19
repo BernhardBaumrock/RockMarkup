@@ -95,6 +95,10 @@ class InputfieldRockMarkup extends InputfieldMarkup {
       'inputfield' => $this,
       'rm' => $this->rm,
     ]));
+
+    // load global config
+    // this is done for each field so that each field can modify settings
+    $this->main()->loadGlobalConfig();
     
     return parent::renderReady($parent, $renderValueMode);
   }

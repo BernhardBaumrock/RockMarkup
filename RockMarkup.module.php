@@ -79,6 +79,9 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
     $this->exampleDir = $this->config->urls($this)."examples/";
     $this->getFiles();
 
+    // global config object that will be available for JS
+    $this->conf = $this->wire(new WireData);
+
     if($this->className == 'RockMarkup') {
       $this->addHookBefore("Modules::uninstall", $this, "customUninstall");
     }
@@ -88,6 +91,13 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
    * Module and API ready
    */
   public function ready() {
+  }
+
+  /**
+   * Load global config
+   */
+  public function ___loadGlobalConfig() {
+    $this->config->js($this->className, $this->conf->getArray());
   }
 
   /**

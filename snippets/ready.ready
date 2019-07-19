@@ -1,0 +1,4 @@
+<?php namespace ProcessWire;
+// set global RockMarkup config property
+// Available in JS as ProcessWire.config.RockMarkup.foo
+$rm->conf->set('foo', 'bar');
