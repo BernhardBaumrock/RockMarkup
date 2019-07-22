@@ -91,10 +91,10 @@ class InputfieldRockMarkup extends InputfieldMarkup {
 
     // load ready file
     $ready = $file->getAsset('ready');
-    if($ready) $this->files->include($ready->file, $this->getAPI([
+    if($ready) $this->files->include($ready->file, [
       'inputfield' => $this,
       'rm' => $this->rm,
-    ]), [
+    ], [
       'allowedPaths' => [$ready->dirname],
     ]);
 
@@ -150,14 +150,6 @@ class InputfieldRockMarkup extends InputfieldMarkup {
   }
 
   /**
-   * Get all API variables and merge them with array
-   */
-  public function getAPI($array = []) {
-    if(!is_array($array)) throw new WireException("Please provide a PHP array!");
-    return array_merge($this->wire('all')->getArray(), $array);
-  }
-
-  /**
    * Set the field content from the file with the same name
    */
   public function ___getContent() {
@@ -180,10 +172,10 @@ class InputfieldRockMarkup extends InputfieldMarkup {
         }
 
         // get markup
-        $out = $this->files->render($file->path, $this->getAPI([
+        $out = $this->files->render($file->path, [
           'inputfield' => $this,
           'rm' => $this->rm,
-        ]), [
+        ], [
           'allowedPaths' => [$file->path],
         ]);
       } catch (\Throwable $th) {
