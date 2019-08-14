@@ -258,7 +258,7 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
     $class = $event->arguments(0);
     $url = "./edit?name=$class";
 
-    // is this a rockmarkup derived class?
+    // is this a rockmarkup2 derived class?
     $module = $this->modules->get($class);
     if(!$module->isRockMarkup2) return;
     

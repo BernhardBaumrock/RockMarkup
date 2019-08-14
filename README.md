@@ -44,7 +44,7 @@ public function ___execute() {
 }
 ```
 
-All the configuration and logic will be done in the field's related files. You can see `/setup/rockmarkup/process-example` in your PW installation as an example.
+All the configuration and logic will be done in the field's related files. You can see `/setup/rockmarkup2/process-example` in your PW installation as an example.
 
 ## Adding dirs via hook
 

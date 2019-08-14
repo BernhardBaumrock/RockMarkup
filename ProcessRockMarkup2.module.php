@@ -16,7 +16,7 @@ class ProcessRockMarkup2 extends Process {
       'icon' => 'code',
       'requires' => ['RockMarkup2'],
       'page' => [
-        'name' => 'rockmarkup',
+        'name' => 'rockmarkup2',
         'title' => 'RockMarkup2',
         'parent' => 'setup',
       ],
