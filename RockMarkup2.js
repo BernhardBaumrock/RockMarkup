@@ -1,7 +1,7 @@
 /**
- * Trigger RockMarkup Events
+ * Trigger RockMarkup2 Events
  */
-function RockMarkup() {
+function RockMarkup2() {
 }
 
 /**
@@ -9,7 +9,7 @@ function RockMarkup() {
  * 
  * This will log only if PW debug mode is ON.
  */
-RockMarkup.prototype.log = function(...str) {
+RockMarkup2.prototype.log = function(...str) {
   if(!ProcessWire.config.debug) return;
   console.log(...str);
 }
@@ -17,14 +17,14 @@ RockMarkup.prototype.log = function(...str) {
 /**
  * Get field data from dom data attribute
  */
-RockMarkup.prototype.getFieldData = function(el) {
-  return $(el).find('.RockMarkupOutput').data('jsdata') || {};
+RockMarkup2.prototype.getFieldData = function(el) {
+  return $(el).find('.RockMarkup2Output').data('jsdata') || {};
 }
 
 /**
  * Debounce function for not firing too many events at once
  */
-RockMarkup.prototype.debounce = function(func, wait, immediate) {
+RockMarkup2.prototype.debounce = function(func, wait, immediate) {
   var wait = wait || 500; // 500ms default
   var timeout;
   return function() {
@@ -41,12 +41,12 @@ RockMarkup.prototype.debounce = function(func, wait, immediate) {
 };
 
 /**
- * Setup the RockMarkup JS object
+ * Setup the RockMarkup2 JS object
  */
-var RockMarkup = new RockMarkup();
+var RockMarkup2 = new RockMarkup2();
 
 // show that this file was loaded
-RockMarkup.log('RockMarkup.js');
+RockMarkup2.log('RockMarkup2.js');
 
 $(document).ready(function() {
   /**
@@ -56,12 +56,12 @@ $(document).ready(function() {
   /**
    * Trigger size event
    */
-  $(window).on('resize', RockMarkup.debounce(function() {
-    $('.InputfieldRockMarkup .InputfieldContent:visible').trigger('size');
+  $(window).on('resize', RockMarkup2.debounce(function() {
+    $('.InputfieldRockMarkup2 .InputfieldContent:visible').trigger('size');
   }));
 
   /**
-   * Trigger RockMarkup
+   * Trigger RockMarkup2
    */
-  $(document).trigger('RockMarkup');
+  $(document).trigger('RockMarkup2');
 });

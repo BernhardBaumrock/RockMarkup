@@ -1,4 +1,4 @@
-# RockMarkup
+# RockMarkup2
 
 This is a ProcessWire module that helps you injecting any custom PHP/JS/CSS code into the PW admin as Inputfields. It comes with a ProcessModule (sandbox) to easily create, test and edit your fields. This sandbox module will only work on Uikit based admin themes.
 
@@ -20,7 +20,7 @@ It is very easy to create new fields/files via the admin interface. Just click t
 
 ### Show a field in the page editor
 
-You can add your markup to any page editor by creating a new PW field of type `RockMarkup` and adding it to your page's template.
+You can add your markup to any page editor by creating a new PW field of type `RockMarkup2` and adding it to your page's template.
 
 There is a helper on the details page of each example:
 
@@ -37,7 +37,7 @@ public function ___execute() {
 
   $form->add([
     'name' => 'yourfieldname',
-    'type' => 'RockMarkup',
+    'type' => 'RockMarkup2',
   ]);
 
   return $form->render();
@@ -48,12 +48,12 @@ All the configuration and logic will be done in the field's related files. You c
 
 ## Adding dirs via hook
 
-You can create custom modules based on RockMarkup. To add your module's directory to RockMarkup you need to modify the `getDirs()` return array in your module's `init()` method, otherwise the files will never be scanned and executed:
+You can create custom modules based on RockMarkup2. To add your module's directory to RockMarkup2 you need to modify the `getDirs()` return array in your module's `init()` method, otherwise the files will never be scanned and executed:
 
 ```php
-$this->addHookAfter("RockMarkup::getDirs", function(HookEvent $event) {
+$this->addHookAfter("RockMarkup2::getDirs", function(HookEvent $event) {
   $dirs = $event->return;
-  $dirs[] = '/site/modules/MyModule/RockMarkup/';
+  $dirs[] = '/site/modules/MyModule/RockMarkup2/';
   $event->return = $dirs;
 });
 ```
@@ -67,7 +67,7 @@ By default the Inputfield will render the field's name if no label is set. You c
 ```php
 $form->add([
   'name' => 'mymarkup',
-  'type' => 'RockMarkup',
+  'type' => 'RockMarkup2',
   'hideLabel' => true,
 ]);
 ```

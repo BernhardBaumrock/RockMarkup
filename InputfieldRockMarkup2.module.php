@@ -1,26 +1,26 @@
 <?php namespace ProcessWire;
 /**
- * Inputfield for RockMarkup Fieldtype
+ * Inputfield for RockMarkup2 Fieldtype
  *
  * @author Bernhard Baumrock, 11.02.2019
  * @license Licensed under MIT
  * @link https://www.baumrock.com
  */
-class InputfieldRockMarkup extends InputfieldMarkup {
+class InputfieldRockMarkup2 extends InputfieldMarkup {
 
   public static function getModuleInfo() {
     return [
-      'title' => 'RockMarkup Inputfield', 
+      'title' => 'RockMarkup2 Inputfield', 
       'summary' => 'Inputfield to display any markup in the PW backend.',
       'version' => '0.0.1',
       'author' => 'Bernhard Baumrock',
       'icon' => 'code',
-      'requires' => ['RockMarkup'],
+      'requires' => ['RockMarkup2'],
     ];
   }
 
   /**
-   * Reference to RockMarkup Module
+   * Reference to RockMarkup2 Module
    */
   protected $rm;
 
@@ -31,11 +31,11 @@ class InputfieldRockMarkup extends InputfieldMarkup {
   private $jsData;
   
   /**
-   * isRockMarkup flag
+   * isRockMarkup2 flag
    * 
    * This flag is necessary for the uninstallation process
    */
-  public $isRockMarkup = true;
+  public $isRockMarkup2 = true;
 
   /**
    * Init this module
@@ -44,17 +44,17 @@ class InputfieldRockMarkup extends InputfieldMarkup {
    */
   public function init() {
     parent::init();
-    $this->rm = $this->modules->get('RockMarkup');
+    $this->rm = $this->modules->get('RockMarkup2');
 
     // set js config var
     $this->jsData = $this->wire(new WireArray);
 
-    // add the RockMarkup class to this field
+    // add the RockMarkup2 class to this field
     // this class is also added from derived fields (like RockTabulator)
     // and makes sure that all events are fired properly
     // must load before RockTabulator.js
-    $this->addClass('RockMarkup');
-    $this->config->scripts->add($this->rm->toUrl(__DIR__.'/RockMarkup.js'));
+    $this->addClass('RockMarkup2');
+    $this->config->scripts->add($this->rm->toUrl(__DIR__.'/RockMarkup2.js'));
   }
   
   /**
@@ -66,7 +66,7 @@ class InputfieldRockMarkup extends InputfieldMarkup {
     $content = $this->getContent();
     $script = $this->getScriptTag();
     $jsData = $this->getJsData();
-    return "<div class='RockMarkupOutput' $jsData>" . $content.$script . "</div>";
+    return "<div class='RockMarkup2Output' $jsData>" . $content.$script . "</div>";
   }
   
   /**

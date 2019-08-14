@@ -6,24 +6,24 @@
  * @license Licensed under MIT
  * @link https://www.baumrock.com
  */
-class FieldtypeRockMarkup extends Fieldtype {
+class FieldtypeRockMarkup2 extends Fieldtype {
 
   public static function getModuleInfo() {
     return [
-      'title' => 'RockMarkup',
+      'title' => 'RockMarkup2',
       'version' => '0.0.1',
       'author' => 'Bernhard Baumrock',
       'icon' => 'code',
-      'requires' => ['RockMarkup'],
+      'requires' => ['RockMarkup2'],
     ];
   }
   
   /**
-   * isRockMarkup flag
+   * isRockMarkup2 flag
    * 
    * This flag is necessary for the uninstallation process
    */
-  public $isRockMarkup = true;
+  public $isRockMarkup2 = true;
 
   /**
    * module initialisation

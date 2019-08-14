@@ -1,7 +1,7 @@
 <?php
 /**
  * .hooks files are regular PHP files that are loaded on initialization of the
- * RockMarkup module. As the RockMarkup module is an autoload module that loads
+ * RockMarkup2 module. As the RockMarkup2 module is an autoload module that loads
  * automatically for all pages in the admin (template=admin) you can place custom
  * hooks in this file.
  * The reason for this file is that if you had an AJAX collapsed Inputfield and

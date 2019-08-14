@@ -1,6 +1,6 @@
 <?php namespace ProcessWire;
 /** @var InputfieldForm $form */
-/** @var RockMarkup $rm */
+/** @var RockMarkup2 $rm */
 $form = $this->modules->get('InputfieldForm');
 $form->name = 'example';
 $form->method = 'GET';
@@ -40,7 +40,7 @@ $form->add($f);
 
 // add rendered grid
 $form->add([
-  'type' => $main, // RockMarkup or derived class
+  'type' => $main, // RockMarkup2 or derived class
   'name' => $name,
   'label' => "Inputfield_$name",
   'collapsed' => $isAjax ? Inputfield::collapsedYesAjax : Inputfield::collapsedNo,

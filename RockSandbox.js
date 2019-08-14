@@ -10,9 +10,9 @@ console.log('RockSandbox.js');
 var logRockSandboxEvent = function(event, num) {
   console.log('Event was fired:', event);
 }
-$(document).on('RockMarkup', '.RockMarkup', function(event) { logRockSandboxEvent(event); });
-$(document).on('loaded', '.RockMarkup', function(event) { logRockSandboxEvent(event); });
-$(document).on('size', '.RockMarkup', function(event) { logRockSandboxEvent(event); });
+$(document).on('RockMarkup2', '.RockMarkup2', function(event) { logRockSandboxEvent(event); });
+$(document).on('loaded', '.RockMarkup2', function(event) { logRockSandboxEvent(event); });
+$(document).on('size', '.RockMarkup2', function(event) { logRockSandboxEvent(event); });
 
 
 $(document).ready(function() {

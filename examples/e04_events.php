@@ -1,9 +1,9 @@
 <p>This example shows all the JS <strong>events that are triggered by
-InputfieldRockMarkup</strong></p>
+InputfieldRockMarkup2</strong></p>
 <p>
   When working with more complex JS (like grids or charts) you'll have to take
   care about WHEN special parts of your code get executed. To make development
-  easier RockMarkup comes with default events that you can easily intercept and
+  easier RockMarkup2 comes with default events that you can easily intercept and
   then fire actions based on that events. It helps you handle tedious edge-cases
   that will likely occur during development and that you might not think of when
   starting with a new project (like handling AJAX-loaded Inputfields etc).
@@ -21,8 +21,8 @@ InputfieldRockMarkup</strong></p>
   </thead>
   <tbody>
     <tr>
-      <td class="uk-text-nowrap">RockMarkup</td>
-      <td>Triggered when InputfieldRockMarkup.js was loaded.</td>
+      <td class="uk-text-nowrap">RockMarkup2</td>
+      <td>Triggered when InputfieldRockMarkup2.js was loaded.</td>
     </tr>
     <tr>
       <td class="uk-text-nowrap">loaded</td>

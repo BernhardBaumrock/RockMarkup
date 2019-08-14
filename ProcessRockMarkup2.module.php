@@ -1,41 +1,41 @@
 <?php namespace ProcessWire;
 /**
- * ProcessRockMarkup Module
+ * ProcessRockMarkup2 Module
  *
  * @author Bernhard Baumrock, 18.06.2019
  * @license Licensed under MIT
  */
-class ProcessRockMarkup extends Process {
+class ProcessRockMarkup2 extends Process {
 
   public static function getModuleInfo() {
     return [
-      'title' => 'ProcessRockMarkup',
-      'summary' => 'RockMarkup Process Module (Sandbox).',
+      'title' => 'ProcessRockMarkup2',
+      'summary' => 'RockMarkup2 Process Module (Sandbox).',
       'version' => 1,
       'author' => 'Bernhard Baumrock',
       'icon' => 'code',
-      'requires' => ['RockMarkup'],
+      'requires' => ['RockMarkup2'],
       'page' => [
         'name' => 'rockmarkup',
-        'title' => 'RockMarkup',
+        'title' => 'RockMarkup2',
         'parent' => 'setup',
       ],
     ];
   }
 
   /**
-   * Reference to RockMarkup module
+   * Reference to RockMarkup2 module
    * 
-   * @var RockMarkup
+   * @var RockMarkup2
    */
   private $rm;
   
   /**
-   * isRockMarkup flag
+   * isRockMarkup2 flag
    * 
    * This flag is necessary for the uninstallation process
    */
-  public $isRockMarkup = true;
+  public $isRockMarkup2 = true;
 
   /**
    * Init. Optional.
@@ -43,8 +43,8 @@ class ProcessRockMarkup extends Process {
   public function init() {
     parent::init(); // always remember to call the parent init
 
-    // set reference to RockMarkup module
-    $rm = $this->modules->get('RockMarkup');
+    // set reference to RockMarkup2 module
+    $rm = $this->modules->get('RockMarkup2');
     $this->rm = $rm;
     
     // add sandbox js and css
@@ -90,11 +90,11 @@ class ProcessRockMarkup extends Process {
   public function executeProcessExample() {
     /** @var InputfieldForm $form */
     $form = $this->modules->get('InputfieldForm');
-    $this->headline('Example of a RockMarkup field in a ProcessModule');
+    $this->headline('Example of a RockMarkup2 field in a ProcessModule');
   
     $form->add([
       'name' => 'e07_chartjs_github',
-      'type' => 'RockMarkup',
+      'type' => 'RockMarkup2',
     ]);
   
     return $form->render();

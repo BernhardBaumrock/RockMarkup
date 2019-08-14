@@ -1,6 +1,6 @@
 <?php namespace ProcessWire;
 /**
- * The RockMarkup Process Module (Sandbox) renders an InputfieldForm named
+ * The RockMarkup2 Process Module (Sandbox) renders an InputfieldForm named
  * "example". In this hooks file we hook before rendering this form and add
  * a custom InputfieldMarkup (PW internal field) that shows some custom HTML.
  */

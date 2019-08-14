@@ -1,3 +1,3 @@
-$(document).on('loaded', '.RockMarkup[data-name=<?= $name ?>]', function() {
+$(document).on('loaded', '.RockMarkup2[data-name=<?= $name ?>]', function() {
   // your code here
 });

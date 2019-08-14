@@ -1,24 +1,24 @@
 <?php namespace ProcessWire;
 /**
- * RockMarkup
+ * RockMarkup2
  *
  * @author Bernhard Baumrock, 10.07.2019
  * @license Licensed under MIT
  */
-require_once("RockMarkupFile.php");
-class RockMarkup extends WireData implements Module, ConfigurableModule {
+require_once("RockMarkup2File.php");
+class RockMarkup2 extends WireData implements Module, ConfigurableModule {
   public static function getModuleInfo() {
     return array(
-      'title' => 'RockMarkup Main Module',
+      'title' => 'RockMarkup2 Main Module',
       'version' => '0.0.1',
-      'summary' => 'RockMarkup Main Module that installs and uninstalls all related modules.',
+      'summary' => 'RockMarkup2 Main Module that installs and uninstalls all related modules.',
       'singular' => true,
       'autoload' => 'template=admin',
       'icon' => 'bolt',
       'installs' => [
-        'FieldtypeRockMarkup',
-        'InputfieldRockMarkup',
-        'ProcessRockMarkup',
+        'FieldtypeRockMarkup2',
+        'InputfieldRockMarkup2',
+        'ProcessRockMarkup2',
       ],
     );
   }
@@ -47,24 +47,24 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
   private $exampleDir;
 
   /**
-   * Possible extensions for RockMarkupFiles
+   * Possible extensions for RockMarkup2Files
    * @var array
    */
   public $extensions = ['md', 'php', 'ready', 'css', 'js', 'hooks'];
 
   /**
-   * Array of all RockMarkupFiles
+   * Array of all RockMarkup2Files
    * @var array
    */
   private $files;
 
   /**
-   * isRockMarkup flag
+   * isRockMarkup2 flag
    * 
    * This flag is necessary for the uninstallation process
    */
-  public $isRockMarkup = true;
-  public $isRockMarkupMain = true;
+  public $isRockMarkup2 = true;
+  public $isRockMarkup2Main = true;
   
   public function __construct() {
     // populate defaults, which will get replaced with actual
@@ -82,7 +82,7 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
     // global config object that will be available for JS
     $this->conf = $this->wire(new WireData);
 
-    if($this->className == 'RockMarkup') {
+    if($this->className == 'RockMarkup2') {
       $this->addHookBefore("Modules::uninstall", $this, "customUninstall");
     }
   }
@@ -103,7 +103,7 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
   /**
    * Return all scanned directories
    * 
-   * This method can be hooked so that other modules can use RockMarkup as well.
+   * This method can be hooked so that other modules can use RockMarkup2 as well.
    * 
    * @param bool $addExampleDir
    * @return array
@@ -129,7 +129,7 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
         'extensions' => ['php'],
         'recursive' => 0,
       ]) as $file) {
-        $rmf = new RockMarkupFile($file);
+        $rmf = new RockMarkup2File($file);
         
         // if a hook file was found include it now
         $hooks = $rmf->getAsset('hooks');
@@ -153,7 +153,7 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
    * Find file by name
    * 
    * @param string $name
-   * @return RockMarkupFile
+   * @return RockMarkup2File
    */
   public function getFile($name = null) {
     if(!$name) $name = $this->input->get('name', 'string');
@@ -162,7 +162,7 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
   }
 
   /**
-   * Create new RockMarkup file
+   * Create new RockMarkup2 file
    */
   public function createFile() {
     $new = $this->input->post('new', 'string');
@@ -260,10 +260,10 @@ class RockMarkup extends WireData implements Module, ConfigurableModule {
 
     // is this a rockmarkup derived class?
     $module = $this->modules->get($class);
-    if(!$module->isRockMarkup) return;
+    if(!$module->isRockMarkup2) return;
     
     // if it is not the main module redirect to it
-    if(!$module->isRockMarkupMain) {
+    if(!$module->isRockMarkup2Main) {
       $main = str_replace(['Fieldtype', 'Inputfield', 'Process'], '', $class);
       $this->error('Please uninstall the main module');
       $event->replace = true;

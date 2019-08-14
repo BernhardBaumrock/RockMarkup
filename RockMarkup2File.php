@@ -1,8 +1,8 @@
 <?php namespace ProcessWire;
-class RockMarkupFile extends WireData {
+class RockMarkup2File extends WireData {
 
   /**
-   * @var RockMarkup;
+   * @var RockMarkup2;
    */
   public $rm;
 
@@ -13,7 +13,7 @@ class RockMarkupFile extends WireData {
     if(!is_file($file)) throw new WireException("File $file not found!");
     $info = pathinfo($file);
 
-    $rm = $this->modules->get('RockMarkup');
+    $rm = $this->modules->get('RockMarkup2');
     $this->rm = $rm;
     
     $name = $info['filename'];
