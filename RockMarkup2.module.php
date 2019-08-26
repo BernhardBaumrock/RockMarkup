@@ -165,7 +165,7 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
    * Create new RockMarkup2 file
    */
   public function createFile() {
-    $new = $this->input->post('new', 'string');
+    $new = $this->sanitizer->filename($this->input->post('new', 'string'));
     $dir = $this->input->post('dir', 'string');
     if(!$new) return;
     if(!$dir) return;
@@ -180,8 +180,12 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
     if(!is_dir($path)) $this->wire->files->mkdir($path);
     if(!is_writable($path)) throw new WireException("Folder $path not writable");
 
+    // check if it already exists
+    $file = $path.$new.".php";
+    if(is_file($file)) throw new WireException("File $file already exists");
+
     // create a new file and redirect
-    file_put_contents($path.$new.".php", $this->getPhpCode());
+    file_put_contents($file, $this->getPhpCode());
     $this->session->redirect("./?name=$new");
   }
 
