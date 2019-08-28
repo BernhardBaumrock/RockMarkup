@@ -254,6 +254,27 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
   }
 
   /**
+   * Return url of asset
+   * @param string $path
+   * @return string
+   */
+  public function assetUrl($file) {
+    $t = '';
+    if(is_file($file)) $t = '?t='.filemtime($file);
+    elseif(strpos($file, '/') !== 0) {
+      // we got a relative filepath
+      // where was this method called from?
+      $trace = debug_backtrace();
+      $info = pathinfo($trace[0]['file']);
+      $dir = $info['dirname'];
+      $file = "$dir/$file";
+    }
+    
+    $url = $this->toUrl($file);
+    return $url.$t;
+  }
+
+  /**
    * Custom uninstall routine
    * 
    * @param HookEvent $event
