@@ -38,7 +38,7 @@ $f->value =
 $f->addClass('uk-margin-remove');
 $form->add($f);
 
-// add rendered grid
+// add rendered result
 $form->add([
   'type' => $main, // RockMarkup2 or derived class
   'name' => $name,
