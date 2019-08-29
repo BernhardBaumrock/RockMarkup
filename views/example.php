@@ -27,10 +27,11 @@ $ajax->attr('checked', $isAjax ? 'checked' : '');
 $f = $this->modules->get('InputfieldMarkup');
 $f->name = 'navbar';
 $f->value =
-  "<div class='uk-child-width-1-2' uk-grid>"
+  "<div class='uk-child-width-1-3' uk-grid>"
     ."<div class='uk-text-left'>"
       ."<a href='./'><i class='fa fa-arrow-left' aria-hidden='true'></i> Zurück</a>"
     ."</div>"
+    ."<div class='uk-text-center'>$prevnext</div>"
     ."<div class='uk-text-right'>"
       .$ajax->render()
     ."</div>"

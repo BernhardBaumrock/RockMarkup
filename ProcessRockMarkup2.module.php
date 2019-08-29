@@ -66,22 +66,38 @@ class ProcessRockMarkup2 extends Process {
       $this->createFile();
 
       // if the field does not exist we redirect to the overview page
-      if(!$this->main()->getFile($name)) {
+      if(!$file = $this->main()->getFile($name)) {
         $this->error("No PHP file for $name found - please create it!");
         $this->session->redirect('./');
       }
 
       // render example
-      return $this->files->render(__DIR__ . '/views/example', [
+      return $this->files->render(__DIR__ . '/views/example.php', [
         'main' => $this->main(),
         'name' => $name,
+        'prevnext' => $this->getPrevNextLinks($file),
       ]);
     }
     
     // list overview
-    return $this->files->render(__DIR__ . '/views/execute', [
+    return $this->files->render(__DIR__ . '/views/execute.php', [
       'rm' => $this->rm,
     ]);
+  }
+
+  /**
+   * Get prev/next links for sandbox
+   */
+  public function getPrevNextLinks($file) {
+    $out = [];
+
+    $prev = $file->prev();
+    if($prev) $out[] = "< <a href='./?name={$prev->name}'>{$prev->name}</a>";
+    
+    $next = $file->next();
+    if($next) $out[] = "<a href='./?name={$next->name}'>{$next->name}</a> >";
+    
+    return implode(" | ", $out);
   }
 
   /**

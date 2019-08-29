@@ -33,6 +33,27 @@ class RockMarkup2File extends WireData {
   }
 
   /**
+   * Get prev file in directory
+   */
+  public function prev($reverse = false) {
+    $files = $this->wire->files->find($this->dir, ['extensions'=>['php']]);
+    if($reverse) $files = array_reverse($files);
+    $prev = false;
+    foreach($files as $file) {
+      if($prev AND $file == $this->path) return new RockMarkup2File($prev);
+      $prev = $file;
+    }
+    return false;
+  }
+  
+  /**
+   * Get next file in directory
+   */
+  public function next() {
+    return $this->prev(true);
+  }
+
+  /**
    * Add all related files to the object
    */
   public function addFiles($rm) {
