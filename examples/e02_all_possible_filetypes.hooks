@@ -10,7 +10,6 @@
  * as placed inside /site/templates/admin.php but on complex sites it might
  * be better to put your code in separate files.
  */
-if(!$this->page OR $this->page->name != 'rockmarkup2') return;
 if($this->input->get('name', 'string') != 'e02_all_possible_filetypes') return;
 
 $tracy = $this->modules->get('TracyDebugger');
