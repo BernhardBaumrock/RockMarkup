@@ -259,9 +259,7 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
    * @return string
    */
   public function assetUrl($file) {
-    $t = '';
-    if(is_file($file)) $t = '?t='.filemtime($file);
-    elseif(strpos($file, '/') !== 0) {
+    if(!is_file($file) AND strpos($file, '/') !== 0) {
       // we got a relative filepath
       // where was this method called from?
       $trace = debug_backtrace();
@@ -269,6 +267,10 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
       $dir = $info['dirname'];
       $file = "$dir/$file";
     }
+
+    // add cache buster
+    $t = '';
+    if(is_file($file)) $t = '?t='.filemtime($file);
     
     $url = $this->toUrl($file);
     return $url.$t;
