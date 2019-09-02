@@ -45,9 +45,6 @@ RockMarkup2.prototype.debounce = function(func, wait, immediate) {
  */
 var RockMarkup2 = new RockMarkup2();
 
-// show that this file was loaded
-RockMarkup2.log('RockMarkup2.js');
-
 $(document).ready(function() {
   /**
    * Load is triggered via <script> tag

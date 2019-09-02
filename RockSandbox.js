@@ -4,7 +4,6 @@
  * You should delete it if you have no javascript to add.
  *
  */
-console.log('RockSandbox.js');
 
 // log all events (before dom is ready)
 var logRockSandboxEvent = function(event, num) {
