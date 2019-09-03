@@ -92,10 +92,10 @@ class ProcessRockMarkup2 extends Process {
     $out = [];
 
     $prev = $file->prev();
-    if($prev) $out[] = "< <a href='./?name={$prev->name}'>{$prev->name}</a>";
+    if($prev) $out[] = "<&nbsp;<a href='./?name={$prev->name}'>{$prev->name}</a>";
     
     $next = $file->next();
-    if($next) $out[] = "<a href='./?name={$next->name}'>{$next->name}</a> >";
+    if($next) $out[] = "<a href='./?name={$next->name}'>{$next->name}</a>&nbsp;>";
     
     return implode(" | ", $out);
   }
