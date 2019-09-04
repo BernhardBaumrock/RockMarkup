@@ -2,12 +2,11 @@
 $link = 'vscode://file/%file:%line';
 $tracy = $this->modules->get('TracyDebugger');
 if($tracy AND $tracy->editor) $link = $tracy->editor;
-$rm = $file->rm;
 
 $out = "<table class='uk-table uk-table-small uk-table-divider'>"
   ."<tbody>";
 
-foreach($rm->extensions as $ext) {
+foreach($file->main->extensions as $ext) {
   $asset = $file->getAsset($ext);
   $code = "<a href='./?name={$file->name}&create=$ext'><i class='fa fa-plus'></i> Create File</a>";
   $label = "{$file->name}.$ext";
@@ -29,7 +28,7 @@ foreach($rm->extensions as $ext) {
     $code = "<pre class='uk-margin-small'><code class='$lang'>$code</code></pre>";
 
     // call hookable function
-    $code = $rm->getCodeMarkup($code, $ext);
+    $code = $file->main->getCodeMarkup($code, $ext);
 
     // markdown?
     if($ext == 'md') {

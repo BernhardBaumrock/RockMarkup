@@ -2,34 +2,31 @@
 class RockMarkup2File extends WireData {
 
   /**
-   * @var RockMarkup2;
-   */
-  public $rm;
-
-  /**
    * constructor
    */
-  public function __construct($file) {
+  public function __construct($file, $main) {
     if(!is_file($file)) throw new WireException("File $file not found!");
     $info = pathinfo($file);
 
-    $rm = $this->modules->get('RockMarkup2');
-    $this->rm = $rm;
+    // set reference to the main module
+    // this can either be RockMarkup2 or any class that extends RockMarkup2
+    $this->main = $main;
     
     $name = $info['filename'];
-    $f = $rm->getFile($name);
+    $f = $this->main->getFile($name);
     if($f) {
       $dir = $f->dir;
       throw new WireException($info['dirname'] . ": $name is already defined in $dir");
     }
 
+    // set properties
     $this->name = $name;
     $this->path = $file;
-    $this->url = $rm->toUrl($file);
-    $this->dir = $rm->toPath($info['dirname']);
+    $this->url = $this->main->toUrl($file);
+    $this->dir = $this->main->toPath($info['dirname']);
 
     // populate all files
-    $this->addFiles($rm);
+    $this->addFiles();
   }
 
   /**
@@ -40,7 +37,10 @@ class RockMarkup2File extends WireData {
     if($reverse) $files = array_reverse($files);
     $prev = false;
     foreach($files as $file) {
-      if($prev AND $file == $this->path) return new RockMarkup2File($prev);
+      if($prev AND $file == $this->path) {
+        $name = pathinfo($prev)['filename'];
+        return $this->main->getFile($name);
+      }
       $prev = $file;
     }
     return false;
@@ -56,10 +56,10 @@ class RockMarkup2File extends WireData {
   /**
    * Add all related files to the object
    */
-  public function addFiles($rm) {
+  public function addFiles() {
     $files = [];
 
-    foreach($rm->extensions as $ext) {
+    foreach($this->main->extensions as $ext) {
       foreach($this->wire->files->find($this->dir, [
         'recursive' => 0,
         'extensions' => [$ext],
@@ -104,7 +104,7 @@ class RockMarkup2File extends WireData {
     }
 
     // pre-check
-    $newfile = $this->rm->getFile($newname);
+    $newfile = $this->main->getFile($newname);
     if($newfile) {
       $this->error("File {$newfile->url} already exists");
       $abort = true;

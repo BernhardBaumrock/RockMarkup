@@ -44,7 +44,7 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
    * Directory with example files
    * @var string
    */
-  private $exampleDir;
+  protected $exampleDir;
 
   /**
    * Possible extensions for RockMarkup2Files
@@ -56,7 +56,7 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
    * Array of all RockMarkup2Files
    * @var array
    */
-  private $files;
+  protected $files;
 
   /**
    * isRockMarkup2 flag
@@ -129,7 +129,7 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
         'extensions' => ['php'],
         'recursive' => 0,
       ]) as $file) {
-        $rmf = new RockMarkup2File($file);
+        $rmf = new RockMarkup2File($file, $this);
         
         // if a hook file was found include it now
         $hooks = $rmf->getAsset('hooks');
