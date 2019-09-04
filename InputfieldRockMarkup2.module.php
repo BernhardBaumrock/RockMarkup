@@ -46,6 +46,10 @@ class InputfieldRockMarkup2 extends InputfieldMarkup {
     parent::init();
     $this->rm = $this->modules->get('RockMarkup2');
 
+    // store a reference to the main module of this inputfield
+    // eg InputfieldRockTabulator->main = RockTabulator
+    $this->main = $this->main();
+
     // set js config var
     $this->jsData = $this->wire(new WireArray);
 
