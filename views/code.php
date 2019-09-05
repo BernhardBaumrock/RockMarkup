@@ -44,8 +44,8 @@ foreach($file->main->extensions as $ext) {
       $del = '';
       foreach($this->wire->languages as $l) {
         if($l->isDefault()) continue;
-        $url = "./translate/?name={$file->name}&ext=$ext&lang=$l";
-        $links .= $del."<a href='$url' class='pw-panel pw-panel-reload'>{$l->title}</a>";
+        $translateurl = "./translate/?name={$file->name}&ext=$ext&lang=$l";
+        $links .= $del."<a href='$translateurl' class='pw-panel pw-panel-reload'>{$l->title}</a>";
         $del = ', ';
       }
       $code .= "<div class='notes'>$links</div>";
