@@ -25,6 +25,7 @@ foreach($file->main->extensions as $ext) {
     $url = str_replace("%file", "$dir/$base", $link);
     $url = str_replace("%line", "1", $url);
     $code = $this->sanitizer->entities(file_get_contents("$dir/$base"));
+    $lang = strpos($code, "__(") !== false;
     $code = "<pre class='uk-margin-small'><code class='$lang'>$code</code></pre>";
 
     // call hookable function
@@ -35,6 +36,19 @@ foreach($file->main->extensions as $ext) {
       require_once('../lib/Parsedown.php');
       $Parsedown = new \Parsedown();
       $code = $Parsedown->text($this->wire->files->render("$dir/$base"));
+    }
+
+    // add links to translate this file
+    if($ext != 'md' AND $lang) {
+      $links = "<i class='fa fa-language'></i> Translate file to ";
+      $del = '';
+      foreach($this->wire->languages as $l) {
+        if($l->isDefault()) continue;
+        $url = "./translate/?name={$file->name}&ext=$ext&lang=$l";
+        $links .= $del."<a href='$url' class='pw-panel pw-panel-reload'>{$l->title}</a>";
+        $del = ', ';
+      }
+      $code .= "<div class='notes'>$links</div>";
     }
 
     $label = "<a href='$url'>$base</a>";

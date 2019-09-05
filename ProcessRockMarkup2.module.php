@@ -38,6 +38,14 @@ class ProcessRockMarkup2 extends Process {
   public $isRockMarkup2 = true;
 
   /**
+   * Constructor
+   */
+  public function __construct() {
+    // add reference to main module
+    $this->main = $this->main();
+  }
+
+  /**
    * Init. Optional.
    */
   public function init() {
@@ -58,7 +66,7 @@ class ProcessRockMarkup2 extends Process {
   public function ___execute() {
     $name = $this->input->get('name', 'text');
     $this->headline($name);
-    $this->browserTitle($this->main() . ": $name");
+    $this->browserTitle($this->main . ": $name");
 
     // single example view
     if($name) {
@@ -66,14 +74,14 @@ class ProcessRockMarkup2 extends Process {
       $this->createFile();
 
       // if the field does not exist we redirect to the overview page
-      if(!$file = $this->main()->getFile($name)) {
+      if(!$file = $this->main->getFile($name)) {
         $this->error("No PHP file for $name found - please create it!");
         $this->session->redirect('./');
       }
 
       // render example
       return $this->files->render(__DIR__ . '/views/example.php', [
-        'main' => $this->main(),
+        'main' => $this->main,
         'name' => $name,
         'prevnext' => $this->getPrevNextLinks($file),
       ]);
@@ -83,6 +91,34 @@ class ProcessRockMarkup2 extends Process {
     return $this->files->render(__DIR__ . '/views/execute.php', [
       'rm' => $this->rm,
     ]);
+  }
+
+  /**
+   * Redirect to translation screen
+   */
+  public function executeTranslate() {
+    $name = $this->input->get('name', 'string');
+    $lang = $this->input->get('lang', 'int');
+    $language = $this->languages->get($lang);
+    $ext = $this->input->get('ext', 'string');
+    $file = $this->main->getFile($name);
+    $file = str_replace(".php", ".$ext", $file->url);
+
+    // get textdomain
+    $translator = $this->wire(new LanguageTranslator($language));
+    $textdomain = $translator->filenameToTextdomain($file);
+
+    // create new file or edit the existing?
+    $exists = is_file($this->config->paths->files . $lang . "/$textdomain.json");
+    
+    // create file if it does not exist yet
+    if(!$exists) $textdomain = $translator->addFileToTranslate($file);
+  
+    // setup url and redirect
+    $url = $this->config->urls->admin
+      ."setup/language-translator/edit/?language_id=$lang&textdomain=$textdomain"
+      ."&modal=panel";
+    $this->session->redirect($url);
   }
 
   /**
@@ -120,7 +156,7 @@ class ProcessRockMarkup2 extends Process {
    * Get Main Module from current process
    */
   public function main() {
-    return $this->modules->get(str_replace('Process', '', $this->process));
+    return $this->modules->get(str_replace('Process', '', $this->className));
   }
 
   /**
@@ -133,7 +169,7 @@ class ProcessRockMarkup2 extends Process {
     $ext = $this->input->get('create', 'string');
     if(!$ext) return;
 
-    $file = $this->main()->getFile($name);
+    $file = $this->main->getFile($name);
     if(!$file) return;
 
     $asset = $file->getAsset($ext);

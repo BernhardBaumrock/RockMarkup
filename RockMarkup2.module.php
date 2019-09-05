@@ -82,6 +82,9 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
     // global config object that will be available for JS
     $this->conf = $this->wire(new WireData);
 
+    // this init method is called for all derived modules
+    // if you want hooks or the like only be attached once or only on the
+    // main module you can place them here
     if($this->className == 'RockMarkup2') {
       $this->addHookBefore("Modules::uninstall", $this, "customUninstall");
     }
