@@ -54,7 +54,7 @@ $(document).ready(function() {
    * Trigger size event
    */
   $(window).on('resize', RockMarkup2.debounce(function() {
-    $('.InputfieldRockMarkup2 .InputfieldContent:visible').trigger('size');
+    $('.InputfieldRockMarkup2 .InputfieldContent:visible').trigger('size.RM');
   }));
 
   /**

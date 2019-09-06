@@ -29,7 +29,7 @@ $f->name = 'navbar';
 $f->value =
   "<div uk-grid>"
     ."<div class='uk-text-left uk-width-auto'>"
-      ."<a href='./'><i class='fa fa-arrow-left' aria-hidden='true'></i> Zurück</a>"
+      ."<a href='./'><i class='fa fa-arrow-up' aria-hidden='true'></i> Zurück</a>"
     ."</div>"
     ."<div class='uk-text-center uk-width-expand'><span class='uk-visible@s'>$prevnext</span></div>"
     ."<div class='uk-text-right uk-width-auto'>"
