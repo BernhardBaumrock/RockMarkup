@@ -79,7 +79,11 @@ class RockMarkup2File extends WireData {
     foreach($this->files as $file) {
       $info = (object)pathinfo($file);
       $info->file = $file;
-      if($extension == $info->extension) return $info;
+      if($extension == $info->extension) {
+        if($this->main->endsWith($info->filename, ".ready")) continue;
+        if($this->main->endsWith($info->filename, ".hooks")) continue;
+        return $info;
+      }
       if($this->main->endsWith($info->filename, ".$extension")) return $info;
     }
   }
@@ -115,13 +119,15 @@ class RockMarkup2File extends WireData {
     }
 
     if($abort) return;
-    
 
     // rename files
     foreach($this->files as $file) {
       $info = (object)pathinfo($file);
       $ext = $info->extension;
-      $this->wire->files->rename($file, "$newname.$ext");
+      if($this->main->endsWith($info->filename, '.ready')) $newfile = "$newname.ready.$ext";
+      elseif($this->main->endsWith($info->filename, '.hooks')) $newfile = "$newname.hooks.$ext";
+      else $newfile = "$newname.$ext";
+      $this->wire->files->rename($file, $newfile);
     }
 
     // rename inputfield?

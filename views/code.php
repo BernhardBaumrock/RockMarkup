@@ -36,7 +36,10 @@ foreach($file->main->extensions as $ext) {
     if($ext == 'md') {
       require_once('../lib/Parsedown.php');
       $Parsedown = new \Parsedown();
-      $code = $Parsedown->text($this->wire->files->render("$dir/$base"));
+      $content = $this->wire->files->render("$dir/$base", [], [
+        'allowedPaths' => [$file->dir],
+      ]);
+      $code = $Parsedown->text($content);
     }
 
     // add links to translate this file

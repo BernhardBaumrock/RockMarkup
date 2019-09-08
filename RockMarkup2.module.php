@@ -166,7 +166,7 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
           $this->wire->files->includeOnce($hooks->file, [
             'rm' => $this,
             'wire' => $this->wire,
-          ]);
+          ], ['allowedPaths'=>[$path]]);
         }
       }
 
