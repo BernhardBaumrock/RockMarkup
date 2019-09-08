@@ -2,6 +2,7 @@
  * CSS files are always loaded when the corresponding Inputfield is present on
  * the current page - no matter what collapsed state the field has.
  */
-#Inputfield_02-all-possible-filetypes .InputfieldContent div {
-  border-bottom: 1px solid blue;
+#Inputfield_e02_all_possible_filetypes .InputfieldContent p {
+  padding: 20px;
+  border: 2px solid blue;
 }

@@ -15,4 +15,4 @@ $this->wire('modules')->get('JqueryUI')->use('vex');
 
 // The Inputfield is available as $field
 // you could change the label for example:
-$inputfield->label = 'foo bar (changed via .ready file)';
+$inputfield->notes = 'This note was added via .ready.php file';

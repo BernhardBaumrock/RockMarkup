@@ -33,14 +33,11 @@ class RockMarkup2File extends WireData {
    * Get prev file in directory
    */
   public function prev($reverse = false) {
-    $files = $this->wire->files->find($this->dir, ['extensions'=>['php']]);
-    if($reverse) $files = array_reverse($files);
+    $files = $this->main->getFilesInPath($this->dir);
+    if($reverse) $files = $files->reverse();
     $prev = false;
     foreach($files as $file) {
-      if($prev AND $file == $this->path) {
-        $name = pathinfo($prev)['filename'];
-        return $this->main->getFile($name);
-      }
+      if($prev AND $file->path == $this->path) return $prev;
       $prev = $file;
     }
     return false;
@@ -65,7 +62,8 @@ class RockMarkup2File extends WireData {
         'extensions' => [$ext],
       ]) as $file) {
         $info = pathinfo($file);
-        if($info['filename'] != $this->name) continue;
+        // if the filename does not start with the base file name we skip it
+        if(strpos($info['filename'], $this->name) !== 0) continue;
         $files[] = $file;
       }
     }
@@ -80,10 +78,9 @@ class RockMarkup2File extends WireData {
   public function getAsset($extension) {
     foreach($this->files as $file) {
       $info = (object)pathinfo($file);
-      if($extension == $info->extension) {
-        $info->file = $file;
-        return $info;
-      }
+      $info->file = $file;
+      if($extension == $info->extension) return $info;
+      if($this->main->endsWith($info->filename, ".$extension")) return $info;
     }
   }
 

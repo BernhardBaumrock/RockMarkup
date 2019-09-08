@@ -10,6 +10,7 @@ foreach($file->main->extensions as $ext) {
   $asset = $file->getAsset($ext);
   $code = "<a href='./?name={$file->name}&create=$ext'><i class='fa fa-plus'></i> Create File</a>";
   $label = "{$file->name}.$ext";
+  if($ext == 'ready' OR $ext == 'hooks') $label .= ".php";
 
   if($asset) {
     $info = (object)pathinfo($asset->file);

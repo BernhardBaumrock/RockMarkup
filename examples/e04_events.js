@@ -1,3 +1,4 @@
+'use strict';
 /**
  * RockSandbox.js logs all events in the console when you are in the sandbox.
  */

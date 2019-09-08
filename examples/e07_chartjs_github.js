@@ -1,3 +1,4 @@
+'use strict';
 $(document).on('loaded', '.RockMarkup2[data-name=e07_chartjs_github]', function(event) {
   var data = RockMarkup2.getFieldData(this);
   var el = $(this).find('canvas')[0];

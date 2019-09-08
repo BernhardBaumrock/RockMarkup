@@ -10,7 +10,7 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
   public static function getModuleInfo() {
     return array(
       'title' => 'RockMarkup2 Main Module',
-      'version' => '0.0.1',
+      'version' => '0.0.2',
       'summary' => 'RockMarkup2 Main Module that installs and uninstalls all related modules.',
       'singular' => true,
       'autoload' => 'template=admin',
@@ -76,6 +76,14 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
    * Initialize the module (optional)
    */
   public function init() {
+    // make sure we don't have any .ready or .hooks files left (security update)
+    foreach($this->wire->files->find($this->config->paths($this), [
+      'extensions' => ['ready', 'hooks'],
+      'excludeDirNames' => ['snippets'],
+      ]) as $file) {
+      $this->error("Please rename $file to $file.php for security reasons");
+    }
+
     // setup the example dir relative to the root folder
     $dir = $this->toRelative($this->config->paths($this)."examples/");
     $this->exampleDir = $dir;
@@ -126,17 +134,33 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
    */
   public function getFiles() {
     if($this->files) return $this->files;
-
     $arr = $this->wire(new WireArray);
     foreach($this->getDirs(true) as $dir) {
       $path = $this->toPath($dir);
-      foreach($this->wire->files->find($path, [
-        'extensions' => ['php'],
-        'recursive' => 0,
-      ]) as $file) {
+      $arr->import($this->getFilesInPath($path));
+    }
+    $this->files = $arr;
+    return $arr;
+  }
+
+  /**
+   * Get files that are in given directory
+   * @param string $path
+   * @return WireArray
+   */
+  public function getFilesInPath($path) {
+    $arr = $this->wire(new WireArray);
+    foreach($this->wire->files->find($path, [
+      'extensions' => ['php'],
+      'recursive' => 0,
+    ]) as $file) {
+      $info = (object)pathinfo($file);
+      if($this->endsWith($info->filename, '.ready')) continue;
+      if($this->endsWith($info->filename, '.hooks')) continue;
+
+      $rmf = $this->getFile($info->filename);
+      if(!$rmf) {
         $rmf = new RockMarkup2File($file, $this);
-        
-        // if a hook file was found include it now
         $hooks = $rmf->getAsset('hooks');
         if($hooks) {
           $this->wire->files->includeOnce($hooks->file, [
@@ -144,14 +168,22 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
             'wire' => $this->wire,
           ]);
         }
-
-        $arr->add($rmf);
       }
-      // must be set on each iteration!
-      $this->files = $arr;
-    }
 
+      $arr->add($rmf);
+    }
     return $arr;
+  }
+
+  /**
+   * Does the given string end with the test string?
+   * @return bool
+   */
+  public function endsWith($string, $test) {
+    $strlen = strlen($string);
+    $testlen = strlen($test);
+    if ($testlen > $strlen) return false;
+    return substr_compare($string, $test, $strlen - $testlen, $testlen) === 0;
   }
 
   /**

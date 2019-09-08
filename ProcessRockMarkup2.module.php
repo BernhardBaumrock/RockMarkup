@@ -176,7 +176,8 @@ class ProcessRockMarkup2 extends Process {
     if($asset) throw new WireException("File $ext already exists!");
     
     // create file and redirect
-    $new = "{$file->dir}$name.$ext"; 
+    $new = "{$file->dir}$name.$ext";
+    if($ext == 'ready' OR $ext == 'hooks') $new .= '.php';
     file_put_contents($new, $this->getNewFileContent($ext, [
       'name' => $name,
     ]));

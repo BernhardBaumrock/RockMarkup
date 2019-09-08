@@ -1,3 +1,4 @@
+'use strict';
 $(document).on('loaded', '.RockMarkup2[data-name=e06_chartjs]', function(event) {
   var ctx = document.getElementById('myChart_e06');
   var myChart = new Chart(ctx, {

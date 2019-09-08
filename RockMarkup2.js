@@ -1,3 +1,4 @@
+'use strict';
 /**
  * Trigger RockMarkup2 Events
  */
