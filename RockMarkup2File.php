@@ -23,7 +23,7 @@ class RockMarkup2File extends WireData {
     $this->name = $name;
     $this->path = $file;
     $this->url = $this->main->toUrl($file);
-    $this->dir = $this->main->toPath($info['dirname']);
+    $this->dir = rtrim($info['dirname'], '/').'/';
 
     // populate all files
     $this->addFiles();

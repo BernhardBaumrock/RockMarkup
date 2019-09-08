@@ -76,7 +76,9 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
    * Initialize the module (optional)
    */
   public function init() {
-    $this->exampleDir = $this->config->urls($this)."examples/";
+    // setup the example dir relative to the root folder
+    $dir = $this->toRelative($this->config->paths($this)."examples/");
+    $this->exampleDir = $dir;
     $this->getFiles();
 
     // global config object that will be available for JS
@@ -254,6 +256,15 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
   public function toPath($url) {
     $url = $this->toUrl($url);
     return $this->config->paths->root.ltrim($url,"/");
+  }
+
+  /**
+   * Return a path relative to the site root
+   */
+  public function toRelative($path) {
+    $url = $this->toUrl($path);
+    $config = $this->wire->config;
+    return str_replace($config->urls->root, '/', $url);
   }
 
   /**
