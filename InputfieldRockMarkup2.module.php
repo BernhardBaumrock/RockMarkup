@@ -203,7 +203,7 @@ class InputfieldRockMarkup2 extends InputfieldMarkup {
 
     // javascript events are ON
     // show spinner and fire loaded event
-    return "<script>$('#Inputfield_{$this->name}').trigger('loaded');</script>";
+    return "<script>$('#Inputfield_{$this->name}').trigger('loaded.RM', '{$this->name}');</script>";
   }
 
   /**

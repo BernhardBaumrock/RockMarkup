@@ -45,21 +45,8 @@ RockMarkup2.prototype.debounce = function(func, wait, immediate) {
  * Setup the RockMarkup2 JS object
  */
 var RockMarkup2 = new RockMarkup2();
+$(document).trigger('ready.RM');
 
-$(document).ready(function() {
-  /**
-   * Load is triggered via <script> tag
-   */
-  
-  /**
-   * Trigger size event
-   */
-  $(window).on('resize', RockMarkup2.debounce(function() {
-    $('.InputfieldRockMarkup2 .InputfieldContent:visible').trigger('size.RM');
-  }));
-
-  /**
-   * Trigger RockMarkup2
-   */
-  $(document).trigger('RockMarkup2');
-});
+$(window).on('resize', RockMarkup2.debounce(function() {
+  $('.InputfieldRockMarkup2 .InputfieldContent:visible').trigger('size.RM');
+}));

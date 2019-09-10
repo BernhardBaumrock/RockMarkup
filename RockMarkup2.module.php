@@ -10,7 +10,7 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
   public static function getModuleInfo() {
     return array(
       'title' => 'RockMarkup2 Main Module',
-      'version' => '0.0.2',
+      'version' => '0.0.3',
       'summary' => 'RockMarkup2 Main Module that installs and uninstalls all related modules.',
       'singular' => true,
       'autoload' => 'template=admin',
