@@ -190,6 +190,24 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
   }
 
   /**
+   * Return links to edit file in all languages
+   * @return string
+   */
+  public function getLanguageLinks($file) {
+    if(!is_file($file)) return;
+    $file = base64_encode($file);
+    $links = "<i class='fa fa-language'></i> Translate file to ";
+    $del = '';
+    foreach($this->wire->languages as $l) {
+      // do NOT skip default language!
+      $translateurl = "./translate/?file=$file&lang=$l";
+      $links .= $del."<a href='$translateurl' class='pw-panel pw-panel-reload'>{$l->title}</a>";
+      $del = ', ';
+    }
+    return $links;
+  }
+
+  /**
    * Does the given string end with the test string?
    * @return bool
    */

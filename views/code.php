@@ -1,7 +1,5 @@
 <?php namespace ProcessWire;
-$link = 'vscode://file/%file:%line';
-$tracy = $this->modules->get('TracyDebugger');
-if($tracy AND $tracy->editor) $link = $tracy->editor;
+$link = $main->codelink;
 
 $out = "<table class='uk-table uk-table-small uk-table-divider'>"
   ."<tbody>";
@@ -44,15 +42,7 @@ foreach($file->main->extensions as $ext) {
 
     // add links to translate this file
     if($ext != 'md' AND $lang) {
-      $links = "<i class='fa fa-language'></i> Translate file to ";
-      $del = '';
-      foreach($this->wire->languages as $l) {
-        if($l->isDefault()) continue;
-        $translateurl = "./translate/?name={$file->name}&ext=$ext&lang=$l";
-        $links .= $del."<a href='$translateurl' class='pw-panel pw-panel-reload'>{$l->title}</a>";
-        $del = ', ';
-      }
-      $code .= "<div class='notes'>$links</div>";
+      $code .= "<div class='notes'>".$main->getLanguageLinks($asset->file)."</div>";
     }
 
     $label = "<a href='$url'>$base</a>";

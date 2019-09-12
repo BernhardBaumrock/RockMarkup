@@ -55,6 +55,7 @@ $form->add([
   'icon' => 'code',
   'class' => 'scroll',
   'value' => $this->files->render(__DIR__ . '/code', [
+    'main' => $main,
     'file' => $file,
   ]),
 ]);
