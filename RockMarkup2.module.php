@@ -10,11 +10,11 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
   public static function getModuleInfo() {
     return array(
       'title' => 'RockMarkup2 Main Module',
-      'version' => '0.0.3',
+      'version' => '0.0.4',
       'summary' => 'RockMarkup2 Main Module that installs and uninstalls all related modules.',
       'singular' => true,
       'autoload' => 'template=admin',
-      'icon' => 'bolt',
+      'icon' => 'code',
       'installs' => [
         'FieldtypeRockMarkup2',
         'InputfieldRockMarkup2',
@@ -24,6 +24,7 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
   }
   static protected $defaults = array(
     'dirs' => "tmp",
+    'codelink' => 'vscode://file/%file:%line',
   );
   public function getModuleConfigInputfields(array $data) {
     $inputfields = new InputfieldWrapper();
@@ -36,6 +37,16 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
     $f->value = $data['dirs'];
     $f->notes = "Path relative to site root, must begin and end with a slash!";
     $inputfields->add($f);
+
+    // fields only for main module
+    if($this->className == 'RockMarkup2') {
+      $inputfields->add([
+        'type' => 'text',
+        'name' => 'codelink',
+        'label' => 'Link to IDE',
+        'value' => $data['codelink'],
+      ]);
+    }
 
     return $inputfields;
   }
@@ -158,6 +169,9 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
       if($this->endsWith($info->filename, '.ready')) continue;
       if($this->endsWith($info->filename, '.hooks')) continue;
 
+      // skip underscore files like _langs.php
+      if(strpos($info->filename, '_') === 0) continue;
+
       $rmf = $this->getFile($info->filename);
       if(!$rmf) {
         $rmf = new RockMarkup2File($file, $this);
@@ -254,6 +268,7 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
     if(!is_dir($dir)) return $arr;
 
     // loop all files
+    bd($this->files, 'files');
     foreach($this->files as $file) {
       if($file->dir == $dir) $arr[] = $file;
     }

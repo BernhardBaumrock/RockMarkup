@@ -1,17 +1,3 @@
-<?php namespace ProcessWire;
-// create file if form was submitted
-$main = $this->modules->get(str_replace('Process', '', $this->process));
-$url = "{$this->config->urls->admin}module/edit?name={$main->className}";
-$main->createFile();
-?>
-
-<p>
-  List of all <?= $main ?> files. Add directories in the 
-  <a href="<?= $url ?>">module's config</a> or via <?= $main ?>::getDirs hook.
-  Please also see the <a href="https://github.com/BernhardBaumrock/<?= $main ?>">
-  readme of the module</a>.
-</p>
-
 <ul uk-accordion>
   <?php foreach($main->getDirs(true) as $dir): ?>
     <li>

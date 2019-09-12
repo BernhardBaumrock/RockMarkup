@@ -88,21 +88,58 @@ class ProcessRockMarkup2 extends Process {
     }
     
     // list overview
-    return $this->files->render(__DIR__ . '/views/execute.php', [
-      'rm' => $this->rm,
+    return $this->getSandboxForm()->render();
+  }
+
+  public function ___getSandboxForm() {
+    /** @var InputfieldForm $form */
+    $form = $this->wire->modules->get('InputfieldForm');
+
+    // create file if form was submitted
+    $url = "{$this->config->urls->admin}module/edit?name={$this->main->className}";
+    $this->main->createFile();
+
+    $form->add([
+      'type' => 'markup',
+      'icon' => 'info-circle',
+      'label' => 'Info',
+      'value' => "List of all {$this->main} files. Add directories in the "
+        ."<a href='$url'>module's config</a> or via {$this->main}::getDirs hook."
+        ."Please also see the <a href='https://github.com/BernhardBaumrock/{$this->main}'>"
+        ."readme of the module</a>.",
     ]);
+
+    $form->add([
+      'type' => 'markup',
+      'icon' => 'files-o',
+      'label' => 'Files',
+      'value' => $this->wire->files->render(__DIR__ . '/views/execute.php', [
+        'rm' => $this->rm,
+        'main' => $this->main,
+      ]),
+    ]);
+
+    return $form;
   }
 
   /**
    * Redirect to translation screen
    */
   public function executeTranslate() {
-    $name = $this->input->get('name', 'string');
     $lang = $this->input->get('lang', 'int');
     $language = $this->languages->get($lang);
-    $ext = $this->input->get('ext', 'string');
-    $file = $this->main->getFile($name);
-    $file = str_replace(".php", ".$ext", $file->url);
+
+    $file = $this->input->get('file', 'string');
+    if($file) {
+      $file = base64_decode($file);
+      $file = $this->main->toUrl($file);
+    }
+    else {
+      $name = $this->input->get('name', 'string');
+      $ext = $this->input->get('ext', 'string');
+      $file = $this->main->getFile($name);
+      $file = str_replace(".php", ".$ext", $file->url);
+    }
 
     // get textdomain
     $translator = $this->wire(new LanguageTranslator($language));
