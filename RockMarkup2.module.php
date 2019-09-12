@@ -286,7 +286,6 @@ class RockMarkup2 extends WireData implements Module, ConfigurableModule {
     if(!is_dir($dir)) return $arr;
 
     // loop all files
-    bd($this->files, 'files');
     foreach($this->files as $file) {
       if($file->dir == $dir) $arr[] = $file;
     }
