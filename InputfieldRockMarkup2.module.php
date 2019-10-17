@@ -170,13 +170,14 @@ class InputfieldRockMarkup2 extends InputfieldMarkup {
       // otherwise try to render the file
       try {
         // get page object
-        $page = $this->page;
+        $editPage = new NullPage();
         if($this->process == 'ProcessPageEdit') {
-          $page = $this->process->getPage();
+          $editPage = $this->process->getPage();
         }
 
         // get markup
         $out = $this->files->render($file->path, [
+          'editPage' => $editPage,
           'inputfield' => $this,
           'rm' => $this->rm,
         ], [
