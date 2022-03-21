@@ -1,5 +1,13 @@
 # RockMarkup2
 
+## A message to Russian 🇷🇺 people
+
+If you currently live in Russia, please read [this message](https://github.com/Roave/SecurityAdvisories/blob/latest/ToRussianPeople.md).
+
+[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://github.com/vshymanskyy/StandWithUkraine/blob/main/docs/README.md)
+
+---
+
 This is a ProcessWire module that helps you injecting any custom PHP/JS/CSS code into the PW admin as Inputfields. It comes with a ProcessModule (sandbox) to easily create, test and edit your fields. This sandbox module will only work on Uikit based admin themes.
 
 ## Installation
